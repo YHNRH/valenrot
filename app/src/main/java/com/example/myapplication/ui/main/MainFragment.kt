@@ -22,10 +22,6 @@ import com.example.myapplication.R
 
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +36,6 @@ class MainFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.fragment_main, container, false)
         fragment.findViewById<Button>(R.id.roll_btn).setOnClickListener {view -> roll(view)}
-
         return fragment
     }
 

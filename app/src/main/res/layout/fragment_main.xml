@@ -95,6 +95,7 @@
             android:layout_height="wrap_content"
             android:text="roll"
             android:id="@+id/roll_btn"
+            android:layout_marginBottom="110px"
             android:layout_gravity="bottom | center"
             />
 
