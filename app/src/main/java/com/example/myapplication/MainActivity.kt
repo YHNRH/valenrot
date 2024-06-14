@@ -4,34 +4,35 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import com.example.myapplication.ui.main.MainFragment
-import com.example.myapplication.ui.raceeditor.RaceEditFragment
+import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.ui.campaignlist.CampaignListFragment
+import com.example.myapplication.ui.roll.RollFragment
+import com.example.myapplication.ui.race.RaceFragment
 import com.example.myapplication.ui.racelist.RaceListFragment
 
 class MainActivity : AppCompatActivity() {
-    private var mainFragment:MainFragment = MainFragment()
-    private var raceListFragment:RaceListFragment = RaceListFragment()
-    private var raceEditFragment:RaceEditFragment = RaceEditFragment()
+    private var rollFragment:RollFragment = RollFragment()
+    private var raceListFragment: RaceListFragment = RaceListFragment()
+    private var campaignListFragment: CampaignListFragment = CampaignListFragment()
+    private var raceFragment:RaceFragment = RaceFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<TextView>(R.id.button1).setOnClickListener{toMainFragment()}
-
-        findViewById<TextView>(R.id.button2).setOnClickListener {toRaceListFragment()}
+        findViewById<TextView>(R.id.menu_roll).setOnClickListener{toRollFragment()}
+        findViewById<TextView>(R.id.menu_races).setOnClickListener {toRaceListFragment()}
+        findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {toCampaignListFragment()}
 
         if (savedInstanceState == null) {
-            // при первом запуске программы
             val fragmentTransaction: FragmentTransaction = supportFragmentManager
                 .beginTransaction()
-            // добавляем в контейнер при помощи метода add()
-            fragmentTransaction.add(R.id.container, mainFragment, MAIN_FRAGMENT)
+            fragmentTransaction.add(R.id.container, rollFragment, MAIN_FRAGMENT)
             fragmentTransaction.commit()
         }
     }
 
-    fun toMainFragment (){
+    fun toRollFragment (){
         val fragment = supportFragmentManager
             .findFragmentByTag(MAIN_FRAGMENT)
 
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 .beginTransaction()
             fragmentTransaction.replace(
                 R.id.container,
-                mainFragment,
+                rollFragment,
                 MAIN_FRAGMENT
             )
             fragmentTransaction.commit()
@@ -62,8 +63,22 @@ class MainActivity : AppCompatActivity() {
             fragmentTransaction.commit()
         }
     }
+    fun toCampaignListFragment(){
+        val fragment = supportFragmentManager
+            .findFragmentByTag(CAMPAIGNLIST_FRAGMENT)
 
-    fun toRaceEditFragment(){
+        if (fragment == null) {
+            val fragmentTransaction: FragmentTransaction = supportFragmentManager
+                .beginTransaction()
+            fragmentTransaction.replace(
+                R.id.container,
+                campaignListFragment,
+                CAMPAIGNLIST_FRAGMENT
+            )
+            fragmentTransaction.commit()
+        }
+    }
+    fun toRaceEditFragment(race: Race){
         val fragment = supportFragmentManager
             .findFragmentByTag(RACEEDIT_FRAGMENT)
 
@@ -72,10 +87,11 @@ class MainActivity : AppCompatActivity() {
                 .beginTransaction()
             fragmentTransaction.replace(
                 R.id.container,
-                raceEditFragment,
+                raceFragment,
                 RACEEDIT_FRAGMENT
             )
-            fragmentTransaction.commit()
+            fragmentTransaction.commitNow()
+            raceFragment.refresh(race)
         }
     }
 
@@ -83,5 +99,6 @@ class MainActivity : AppCompatActivity() {
         const val MAIN_FRAGMENT: String = "MAIN_FRAGMENT"
         const val RACELIST_FRAGMENT: String = "RACELIST_FRAGMENT"
         const val RACEEDIT_FRAGMENT: String = "RACEEDIT_FRAGMENT"
+        const val CAMPAIGNLIST_FRAGMENT: String = "CAMPAIGNLIST_FRAGMENT"
     }
 }

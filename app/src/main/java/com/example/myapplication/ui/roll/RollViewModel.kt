@@ -1,9 +1,9 @@
-package com.example.myapplication.ui.main
+package com.example.myapplication.ui.roll
 
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
 
-class MainViewModel : ViewModel() {
+class RollViewModel : ViewModel() {
     val roll = 0
 
     fun roll():Int{

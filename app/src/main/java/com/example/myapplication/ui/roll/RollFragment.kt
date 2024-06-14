@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.main
+package com.example.myapplication.ui.roll
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -20,9 +20,9 @@ import com.bumptech.glide.request.target.Target
 import com.example.myapplication.R
 
 
-class MainFragment : Fragment() {
+class RollFragment : Fragment() {
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: RollViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,6 @@ class MainFragment : Fragment() {
         val imageView = root.findViewById<ImageView>(R.id.myImageView)
         val imageView1 = root.findViewById<ImageView>(R.id.myImageView1)
 
-        /*from raw folder*/
         Glide.with(this)
             .load(R.drawable.roll_green)
             .listener(object : RequestListener<Drawable> {
@@ -61,7 +60,7 @@ class MainFragment : Fragment() {
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    var res = resource as GifDrawable
+                    val res = resource as GifDrawable
                     res.setLoopCount(1)
                     res.registerAnimationCallback(object :
                         Animatable2Compat.AnimationCallback() {
@@ -91,11 +90,11 @@ class MainFragment : Fragment() {
                 override fun onResourceReady(
                     resource: Drawable,
                     model: Any,
-                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                    target: Target<Drawable>?,
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    var res = resource as GifDrawable
+                    val res = resource as GifDrawable
                     res.setLoopCount(1)
                     res.registerAnimationCallback(object :
                         Animatable2Compat.AnimationCallback() {

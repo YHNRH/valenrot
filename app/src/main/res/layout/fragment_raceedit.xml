@@ -5,7 +5,7 @@
     android:id="@+id/race_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.raceeditor.RaceEditFragment">
+    tools:context=".ui.race.RaceFragment">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -15,7 +15,13 @@
         <EditText
             android:layout_width="wrap_content"
             android:text="loremipsum"
+            android:id="@+id/name"
             android:layout_height="wrap_content"/>
+        <EditText
+        android:layout_width="wrap_content"
+        android:text="loremipsum"
+        android:id="@+id/description"
+        android:layout_height="wrap_content"/>
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,6 +33,7 @@
                 android:text="Сила:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/strength"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -36,6 +43,7 @@
                 android:text="Ловкость:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/agility"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -45,6 +53,7 @@
                 android:text="Харизма:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/charisma"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -54,6 +63,7 @@
                 android:text="Интеллект:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/intelligence"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -64,6 +74,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:text="1"
+                android:id="@+id/perception"
                 android:layout_height="wrap_content"/>
 
             <TextView
@@ -72,6 +83,7 @@
                 android:text="Здоровье:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/health"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -81,6 +93,7 @@
                 android:text="Уворот:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/dodge"
                 android:text="1"
                 android:layout_height="wrap_content"/>
 
@@ -90,6 +103,7 @@
                 android:text="Стойкость:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/durability"
                 android:text="1"
                 android:layout_height="wrap_content"/>
             <TextView
@@ -98,6 +112,7 @@
                 android:text="Точность:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/accuracy"
                 android:text="1"
                 android:layout_height="wrap_content"/>
             <TextView
@@ -106,6 +121,7 @@
                 android:text="Урон:"/>
             <EditText
                 android:layout_width="wrap_content"
+                android:id="@+id/damage"
                 android:text="1"
                 android:layout_height="wrap_content"/>
         </GridLayout>
