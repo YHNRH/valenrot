@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
     import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
+import com.example.myapplication.core.room.entity.CharacterAndRace
 
 class CharacterRVAdapter(
     val context: Context,
@@ -17,12 +18,11 @@ class CharacterRVAdapter(
 ) :
         RecyclerView.Adapter<CharacterRVAdapter.ViewHolder>() {
 
-        private val allCharacter = ArrayList<Character>()
-        var expand = false
+        private val allCharacter = ArrayList<CharacterAndRace>()
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val noteTV = itemView.findViewById<TextView>(R.id.name)
-            val dateTV = itemView.findViewById<TextView>(R.id.health)
-            val deleteIV = itemView.findViewById<TextView>(R.id.delete)
+            val nameTV = itemView.findViewById<TextView>(R.id.name)
+            val raceTV = itemView.findViewById<TextView>(R.id.race)
+            val deleteBtn = itemView.findViewById<TextView>(R.id.delete)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,10 +34,10 @@ class CharacterRVAdapter(
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.noteTV.setText(allCharacter[position].name)
-            holder.dateTV.setText("Last Updated : " + allCharacter.get(position).lastChangeDate)
-            holder.deleteIV.setOnClickListener {
-                characterClickDeleteInterface.onDeleteIconClick(allCharacter[position])
+            holder.nameTV.setText(allCharacter[position].character .name)
+            holder.raceTV.setText(allCharacter[position].race.name)
+            holder.deleteBtn.setOnClickListener {
+                characterClickDeleteInterface.onDeleteIconClick(allCharacter[position].character)
             }
             holder.itemView.setOnClickListener {
                 //campaignClickInterface.onCampaignClick(allCampaigns[position])
@@ -48,9 +48,9 @@ class CharacterRVAdapter(
             return allCharacter.size
         }
 
-        fun updateList(newList: List<Character>, campaign: Campaign) {
+        fun updateList(newList: List<CharacterAndRace>, campaign: Campaign) {
             allCharacter.clear()
-            val test = newList.filter { it.campaignId == campaign.uid}
+            val test = newList.filter { it.character.campaignId == campaign.uid}
             allCharacter.addAll(test)
             notifyDataSetChanged()
         }

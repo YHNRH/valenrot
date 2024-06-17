@@ -11,7 +11,7 @@ import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
 import com.example.myapplication.core.room.entity.Race
 
-@Database(entities = [Race::class, Campaign::class, Character::class], version = 4)
+@Database(entities = [Race::class, Campaign::class, Character::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRaceDao(): RaceDao
     abstract fun getCharacterDao(): CharacterDao

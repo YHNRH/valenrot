@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import com.example.myapplication.core.room.dao.CharacterDao
 import com.example.myapplication.core.room.dao.RaceDao
 import com.example.myapplication.core.room.entity.Character
-import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.core.room.entity.CharacterAndRace
 
 class CharacterRepository(private val characterDao: CharacterDao) {
 
-    val allCharacters: LiveData<List<Character>> = characterDao.getAllCharacters()
+    val allCharacters: LiveData<List<CharacterAndRace>> = characterDao.getCharactersAndRace()
 
     suspend fun insert(character: Character) {
         characterDao.insert(character)

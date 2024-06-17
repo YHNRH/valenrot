@@ -7,11 +7,12 @@ import com.example.myapplication.core.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.core.room.entity.Character
+import com.example.myapplication.core.room.entity.CharacterAndRace
 import com.example.myapplication.core.room.repo.CharacterRepository
 import kotlinx.coroutines.launch
 
 class CharacterViewModel(application: Application) : AndroidViewModel(application) {
-    val allCharacters : LiveData<List<Character>>
+    val allCharacters : LiveData<List<CharacterAndRace>>
     private val repository : CharacterRepository
 
     init {

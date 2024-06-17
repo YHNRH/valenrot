@@ -96,8 +96,6 @@ class RaceFragment : Fragment() {
                     viewModel.updateRace(updatedRace)
                     Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
             } else {
-                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-                    val currentDateAndTime: String = sdf.format(Date())
                     val insertRace = Race(
                         strength,
                         agility,
@@ -111,7 +109,7 @@ class RaceFragment : Fragment() {
                         damage,
                         description,
                         name,
-                        currentDateAndTime)
+                        SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()))
                     viewModel.addRace(insertRace)
                     Toast.makeText(activity, "${insertRace.name} Added", Toast.LENGTH_LONG).show()
             }

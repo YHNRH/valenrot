@@ -13,7 +13,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import com.bumptech.glide.Glide
@@ -25,21 +24,33 @@ import com.bumptech.glide.request.target.Target
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
+import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.ui.campaignlist.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
+import com.example.myapplication.viewmodel.RaceViewModel
 import com.example.myapplication.viewmodel.RollViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlin.properties.Delegates
+import kotlin.random.Random
 
 
 class RollFragment : Fragment() {
 
-    private val viewModel: RollViewModel by viewModels()
+    //private val viewModel: RollViewModel by viewModels()
+    lateinit var raceViewModel: RaceViewModel
     lateinit var campaignViewModel: CampaignViewModel
     lateinit var characterViewModel: CharacterViewModel
     lateinit var spinner:Spinner
     lateinit var nameET:EditText
+    lateinit var rollRaceNumberTV:TextView
+    lateinit var rollTemperNumberTV:TextView
+    lateinit var rollRaceTV:TextView
+    lateinit var rollTemperTV:TextView
+
+    lateinit var rolledRace :Race
+    var rolledTemper = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,8 +63,12 @@ class RollFragment : Fragment() {
     ): View {
         val fragment = inflater.inflate(R.layout.fragment_main, container, false)
         fragment.findViewById<Button>(R.id.roll_btn).setOnClickListener {view -> roll(view)}
-        fragment.findViewById<Button>(R.id.save_btn).setOnClickListener {view -> save(view)}
+        fragment.findViewById<Button>(R.id.save_btn).setOnClickListener { save()}
         nameET = fragment.findViewById(R.id.name)
+        rollRaceNumberTV = fragment.findViewById<TextView>(R.id.roll_tw)
+        rollTemperNumberTV = fragment.findViewById<TextView>(R.id.roll_tw1)
+        rollRaceTV = fragment.findViewById<TextView>(R.id.race)
+        rollTemperTV = fragment.findViewById<TextView>(R.id.temper)
 
         campaignViewModel = ViewModelProvider(
             this,
@@ -64,6 +79,11 @@ class RollFragment : Fragment() {
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[CharacterViewModel::class.java]
+
+        raceViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[RaceViewModel::class.java]
 
         spinner = fragment.findViewById(R.id.spinner)
 
@@ -79,13 +99,9 @@ class RollFragment : Fragment() {
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>,
                                         view: View, position: Int, id: Long) {
-//                    Toast.makeText(requireContext(),
-//                        "Selected item" + " " +
-//                                "" + languages[position], Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action
             }
         }
         return fragment
@@ -94,10 +110,9 @@ class RollFragment : Fragment() {
     private fun roll(view: View) {
 
         val root = view.rootView
-        val textView = root.findViewById<TextView>(R.id.roll_tw)
-        val textView1 = root.findViewById<TextView>(R.id.roll_tw1)
-        textView.text = ""
-        textView1.text = ""
+
+        rollRaceNumberTV.text = ""
+        rollTemperNumberTV.text = ""
         val imageView = root.findViewById<ImageView>(R.id.myImageView)
         val imageView1 = root.findViewById<ImageView>(R.id.myImageView1)
 
@@ -117,7 +132,7 @@ class RollFragment : Fragment() {
                     res.registerAnimationCallback(object :
                         Animatable2Compat.AnimationCallback() {
                         override fun onAnimationEnd(drawable: Drawable) {
-                            textView.text = viewModel.roll().toString()
+                            rollTemper()
                         }
                     })
 
@@ -151,7 +166,7 @@ class RollFragment : Fragment() {
                     res.registerAnimationCallback(object :
                         Animatable2Compat.AnimationCallback() {
                         override fun onAnimationEnd(drawable: Drawable) {
-                            textView1.text = viewModel.roll().toString()
+                            rollRace()
                         }
                     })
 
@@ -170,23 +185,51 @@ class RollFragment : Fragment() {
             .into(imageView1);
 
     }
-    private fun save(view: View) {
-        val campaign = spinner.selectedItem as Campaign
-        val name =nameET.text.toString()
-        val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
-        Toast.makeText(requireContext(),
-            campaign.name + "\n" +
-            campaign.uid + "\n" +
-            name + "\n"
 
-            , Toast.LENGTH_SHORT).show()
+    private fun rollRace(){
+            raceViewModel.allRaces.observe(this.requireActivity()) { list ->
+                list?.let {
+                    val rnd = Random.nextInt(1, list.size+1)
+                    val value = list[rnd - 1]
+                    rollRaceNumberTV.text = rnd.toString()
+                    rollRaceTV.text = value.name
+                    rolledRace = value
+                }
 
-        characterViewModel.addCharacter(Character(
-            1,
-            name,
-            campaign.uid,
-            currentDateAndTime
-        ))
+            }
+    }
+
+    private fun rollTemper(){
+        val rnd = Random.nextInt(1, 21)
+        rollTemperNumberTV.text = rnd.toString()
+        rollTemperTV.text = rnd.toString()
+        rolledTemper = rnd
+    }
+
+    private fun save() {
+
+        if (this::rolledRace.isInitialized && rolledTemper != 0){
+            val campaign =  spinner.selectedItem as Campaign
+            val name     =  nameET.text.toString()
+            val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
+            characterViewModel.addCharacter(Character(
+                rolledRace.uid,
+                name,
+                campaign.uid,
+                rolledTemper,
+                currentDateAndTime
+            ))
+            Toast.makeText(requireContext(),
+                campaign.name + "\n" +
+                        campaign.uid + "\n" +
+                        name + "\n",
+                Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(),
+                "Ошибка сохранения персонажа",
+                Toast.LENGTH_SHORT).show()
+        }
+
     }
 
 

@@ -29,7 +29,6 @@ class CampaignRVAdapter(
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val noteTV = itemView.findViewById<TextView>(R.id.name)
-            val dateTV = itemView.findViewById<TextView>(R.id.lastupdate)
             val deleteIV = itemView.findViewById<TextView>(R.id.delete)
             val expandBtn = itemView.findViewById<TextView>(R.id.expand)
 
@@ -57,7 +56,6 @@ class CampaignRVAdapter(
             }
 
             holder.noteTV.text = allCampaigns[position].name
-            holder.dateTV.text = "Last Updated : " + allCampaigns.get(position).lastChangeDate
             holder.deleteIV.setOnClickListener {
                 campaignClickDeleteInterface.onDeleteIconClick(allCampaigns[position])
             }

@@ -6,8 +6,10 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.myapplication.core.room.entity.Character
+import com.example.myapplication.core.room.entity.CharacterAndRace
 import com.example.myapplication.core.room.entity.Race
 
 @Dao
@@ -21,6 +23,10 @@ interface CharacterDao {
     @Query("SELECT * FROM race WHERE name LIKE :first AND " +
             "description LIKE :last LIMIT 1")
     fun findByName(first: String, last: String): Race
+    @Transaction
+    @Query("SELECT * FROM character order by uid ASC")
+    fun getCharactersAndRace(): LiveData<List<CharacterAndRace>>
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(character: Character)

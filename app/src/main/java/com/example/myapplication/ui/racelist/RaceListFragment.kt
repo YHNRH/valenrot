@@ -14,6 +14,7 @@ import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.viewmodel.RaceViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class RaceListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterface  {
@@ -60,7 +61,7 @@ class RaceListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterfac
                 1,
                 "1",
                 "desc",
-                Date().time.toString()
+                SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
             ))
             Toast.makeText(this.requireContext(), "test Added", Toast.LENGTH_LONG).show()
         }

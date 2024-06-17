@@ -15,6 +15,7 @@ import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.SimpleDateFormat
 import java.util.Date
 
 class CampaignListFragment : Fragment(), CampaignClickInterface, CampaignClickDeleteInterface  {
@@ -60,10 +61,9 @@ class CampaignListFragment : Fragment(), CampaignClickInterface, CampaignClickDe
 
         addFAB.setOnClickListener {
             viewModel.addCampaign(Campaign(
-                "Test campaign",
-                Date().time.toString()
+                "Новая компания",
+                SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
             ))
-            Toast.makeText(this.requireContext(), "test Added", Toast.LENGTH_LONG).show()
         }
         return fragment
     }
