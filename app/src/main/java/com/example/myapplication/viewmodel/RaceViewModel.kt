@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.racelist
+package com.example.myapplication.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

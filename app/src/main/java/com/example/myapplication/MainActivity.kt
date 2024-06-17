@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.ui.campaign.CampaignFragment
 import com.example.myapplication.ui.campaignlist.CampaignListFragment
 import com.example.myapplication.ui.roll.RollFragment
 import com.example.myapplication.ui.race.RaceFragment
@@ -15,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private var raceListFragment: RaceListFragment = RaceListFragment()
     private var campaignListFragment: CampaignListFragment = CampaignListFragment()
     private var raceFragment:RaceFragment = RaceFragment()
+    private var campaignFragment:CampaignFragment = CampaignFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,10 +98,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun toCampaignEditFragment(campaign: Campaign){
+        val fragment = supportFragmentManager
+            .findFragmentByTag(CAMPAIGNEDIT_FRAGMENT)
+
+        if (fragment == null) {
+            val fragmentTransaction: FragmentTransaction = supportFragmentManager
+                .beginTransaction()
+            fragmentTransaction.replace(
+                R.id.container,
+                campaignFragment,
+                CAMPAIGNEDIT_FRAGMENT
+            )
+            fragmentTransaction.commitNow()
+            campaignFragment.refresh(campaign)
+        }
+    }
+
     companion object {
         const val MAIN_FRAGMENT: String = "MAIN_FRAGMENT"
         const val RACELIST_FRAGMENT: String = "RACELIST_FRAGMENT"
         const val RACEEDIT_FRAGMENT: String = "RACEEDIT_FRAGMENT"
         const val CAMPAIGNLIST_FRAGMENT: String = "CAMPAIGNLIST_FRAGMENT"
+        const val CAMPAIGNEDIT_FRAGMENT: String = "CAMPAIGNEDIT_FRAGMENT"
     }
 }

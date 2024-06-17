@@ -13,8 +13,7 @@ import com.example.myapplication.MainActivity
 
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Race
-import com.example.myapplication.ui.racelist.CampaignViewModel
-import com.example.myapplication.ui.racelist.RaceViewModel
+import com.example.myapplication.viewmodel.RaceViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -78,8 +77,7 @@ class RaceFragment : Fragment() {
             val description = descriptionET.text.toString()
             val name = nameET.text.toString()
             if (raceID != -1) {
-                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-                    val currentDateAndTime: String = sdf.format(Date())
+                    val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
                     val updatedRace = Race(
                         strength,
                         agility,

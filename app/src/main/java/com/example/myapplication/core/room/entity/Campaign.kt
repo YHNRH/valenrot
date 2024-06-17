@@ -2,6 +2,7 @@ package com.example.myapplication.core.room.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 
@@ -12,4 +13,6 @@ data class Campaign(
 ){
     @PrimaryKey(autoGenerate = true)
     var uid: Int = 0
+    @Ignore
+    var isExpanded = false
 }

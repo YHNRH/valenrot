@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.racelist
+package com.example.myapplication.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -21,13 +21,13 @@ class CampaignViewModel(application: Application) : AndroidViewModel(application
         repository = CampaignRepository(dao)
         allCampaigns = repository.allCampaigns
     }
-    fun deleteRace(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteCampaign(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(campaign)
     }
-    fun updateRace(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateCampaign(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
         repository.update(campaign)
     }
-    fun addRace(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
+    fun addCampaign(campaign: Campaign) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(campaign)
     }
 }

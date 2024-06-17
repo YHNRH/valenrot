@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Campaign
-import com.example.myapplication.core.room.entity.Race
-import com.example.myapplication.ui.racelist.CampaignViewModel
+import com.example.myapplication.viewmodel.CampaignViewModel
+import com.example.myapplication.viewmodel.CharacterViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.Date
 
-class CampaignListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterface  {
+class CampaignListFragment : Fragment(), CampaignClickInterface, CampaignClickDeleteInterface  {
 
     lateinit var viewModel: CampaignViewModel
     private lateinit var campaignsRV: RecyclerView
@@ -32,7 +33,17 @@ class CampaignListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInte
 
         campaignsRV.layoutManager = LinearLayoutManager(requireActivity())
 
-        val campaignRVAdapter = CampaignAdapter(requireActivity(), this, this)
+        val characterViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[CharacterViewModel::class.java]
+
+        val campaignRVAdapter = CampaignRVAdapter(
+            requireActivity(),
+            characterViewModel,
+            this,
+            this,
+            this)
 
         campaignsRV.adapter = campaignRVAdapter
 
@@ -46,33 +57,23 @@ class CampaignListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInte
                 campaignRVAdapter.updateList(it)
             }
         }
+
         addFAB.setOnClickListener {
-//            viewModel.addRace(Race(
-//                1,
-//                3,
-//                54,
-//                5,
-//                1,
-//                1,
-//                1,
-//                1,
-//                1,
-//                1,
-//                "1",
-//                "desc",
-//                Date().time.toString()
-//            ))
+            viewModel.addCampaign(Campaign(
+                "Test campaign",
+                Date().time.toString()
+            ))
             Toast.makeText(this.requireContext(), "test Added", Toast.LENGTH_LONG).show()
         }
         return fragment
     }
 
-    override fun onRaceClick(campaign: Campaign) {
-        //(activity as MainActivity).toRaceEditFragment(campaign)
+    override fun onCampaignClick(campaign: Campaign) {
+        (activity as MainActivity).toCampaignEditFragment(campaign)
     }
 
     override fun onDeleteIconClick(campaign: Campaign) {
-        viewModel.deleteRace(campaign)
+        viewModel.deleteCampaign(campaign)
         Toast.makeText(requireContext(), "${campaign.name} Deleted", Toast.LENGTH_LONG).show()
     }
 }

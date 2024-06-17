@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.roll
+package com.example.myapplication.viewmodel
 
 import androidx.lifecycle.ViewModel
 import kotlin.random.Random
