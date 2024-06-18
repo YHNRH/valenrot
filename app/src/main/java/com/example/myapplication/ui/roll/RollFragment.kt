@@ -206,6 +206,10 @@ class RollFragment : Fragment() {
         rolledTemper = rnd
     }
 
+    private fun rollName(){
+	val names = arrayOf("", "")
+    }
+
     private fun save() {
 
         if (this::rolledRace.isInitialized && rolledTemper != 0){
