@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -22,6 +21,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapplication.R
+import com.example.myapplication.core.retrofit.Common
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
 import com.example.myapplication.core.room.entity.Race
@@ -29,28 +29,29 @@ import com.example.myapplication.ui.campaignlist.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.example.myapplication.viewmodel.RaceViewModel
-import com.example.myapplication.viewmodel.RollViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
-import kotlin.properties.Delegates
 import kotlin.random.Random
 
 
 class RollFragment : Fragment() {
 
-    //private val viewModel: RollViewModel by viewModels()
-    lateinit var raceViewModel: RaceViewModel
-    lateinit var campaignViewModel: CampaignViewModel
-    lateinit var characterViewModel: CharacterViewModel
-    lateinit var spinner:Spinner
-    lateinit var nameET:EditText
-    lateinit var rollRaceNumberTV:TextView
-    lateinit var rollTemperNumberTV:TextView
-    lateinit var rollRaceTV:TextView
-    lateinit var rollTemperTV:TextView
+    private lateinit var raceViewModel: RaceViewModel
+    private lateinit var campaignViewModel: CampaignViewModel
+    private lateinit var characterViewModel: CharacterViewModel
+    private lateinit var spinner:Spinner
+    private lateinit var nameET:EditText
+    private lateinit var rollRaceNumberTV : TextView
+    private lateinit var rollTemperNumberTV : TextView
+    private lateinit var rollRaceTV : TextView
+    private lateinit var rollTemperTV : TextView
+    private lateinit var rolledRace : Race
+    private var rolledTemper = 0
+    private var mService = Common.retrofitService
 
-    lateinit var rolledRace :Race
-    var rolledTemper = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -65,10 +66,10 @@ class RollFragment : Fragment() {
         fragment.findViewById<Button>(R.id.roll_btn).setOnClickListener {view -> roll(view)}
         fragment.findViewById<Button>(R.id.save_btn).setOnClickListener { save()}
         nameET = fragment.findViewById(R.id.name)
-        rollRaceNumberTV = fragment.findViewById<TextView>(R.id.roll_tw)
-        rollTemperNumberTV = fragment.findViewById<TextView>(R.id.roll_tw1)
-        rollRaceTV = fragment.findViewById<TextView>(R.id.race)
-        rollTemperTV = fragment.findViewById<TextView>(R.id.temper)
+        rollRaceNumberTV = fragment.findViewById(R.id.roll_tw)
+        rollTemperNumberTV = fragment.findViewById(R.id.roll_tw1)
+        rollRaceTV = fragment.findViewById(R.id.race)
+        rollTemperTV = fragment.findViewById(R.id.temper)
 
         campaignViewModel = ViewModelProvider(
             this,
@@ -87,21 +88,11 @@ class RollFragment : Fragment() {
 
         spinner = fragment.findViewById(R.id.spinner)
 
-        val adapter =
-            CampaignSpinnerAdapter(requireContext())
+        val adapter = CampaignSpinnerAdapter(requireContext())
         spinner.adapter = adapter
         campaignViewModel.allCampaigns.observe(this.requireActivity()) { list ->
             list?.let {
                 adapter.updateList(it)
-            }
-        }
-        spinner.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View, position: Int, id: Long) {
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
         return fragment
@@ -123,7 +114,7 @@ class RollFragment : Fragment() {
                 override fun onResourceReady(
                     resource: Drawable,
                     model: Any,
-                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                    target: Target<Drawable>?,
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
@@ -133,6 +124,7 @@ class RollFragment : Fragment() {
                         Animatable2Compat.AnimationCallback() {
                         override fun onAnimationEnd(drawable: Drawable) {
                             rollTemper()
+                            rollName()
                         }
                     })
 
@@ -189,6 +181,7 @@ class RollFragment : Fragment() {
     private fun rollRace(){
             raceViewModel.allRaces.observe(this.requireActivity()) { list ->
                 list?.let {
+                    TODO("check list.size")
                     val rnd = Random.nextInt(1, list.size+1)
                     val value = list[rnd - 1]
                     rollRaceNumberTV.text = rnd.toString()
@@ -207,7 +200,22 @@ class RollFragment : Fragment() {
     }
 
     private fun rollName(){
-	val names = arrayOf("", "")
+        mService.getRandomNames().enqueue(object : Callback<String> {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Toast.makeText(requireContext(),
+                    "Ошибка рандомайзера имени!",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.body() != null){
+                    val names = response.body()!!.split("<br>")
+                    val value = names[Random.nextInt(names.size)]
+                    nameET.setText(value)
+                }
+            }
+        })
+
     }
 
     private fun save() {
@@ -218,9 +226,9 @@ class RollFragment : Fragment() {
             val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
             characterViewModel.addCharacter(Character(
                 rolledRace.uid,
-                name,
                 campaign.uid,
                 rolledTemper,
+                name,
                 currentDateAndTime
             ))
             Toast.makeText(requireContext(),

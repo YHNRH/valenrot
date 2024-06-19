@@ -7,20 +7,17 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Race(
-    @ColumnInfo(name = "strength")      val strength: Int?,
-    @ColumnInfo(name = "agility")       val agility: Int?,
-    @ColumnInfo(name = "charisma")      val charisma: Int?,
-    @ColumnInfo(name = "intelligence")  val intelligence: Int?,
-    @ColumnInfo(name = "perception")    val perception: Int?,
-    @ColumnInfo(name = "health")        val health: Int?,
-    @ColumnInfo(name = "dodge")         val dodge: Int?,
-    @ColumnInfo(name = "durability")    val durability: Int?,
-    @ColumnInfo(name = "accuracy")      val accuracy: Int?,
-    @ColumnInfo(name = "damage")        val damage: Int?,
-    @ColumnInfo(name = "description")   val description: String?,
-    @ColumnInfo(name = "name")          val name: String?,
-    @ColumnInfo(name = "lastChangeDate")val lastChangeDate: String?
-){
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
-}
+    val strength: Int?,
+    val agility: Int?,
+    val charisma: Int?,
+    val intelligence: Int?,
+    val perception: Int?,
+    val health: Int?,
+    val dodge: Int?,
+    val durability: Int?,
+    val accuracy: Int?,
+    val damage: Int?,
+    val description: String?,
+    override val name: String?,
+    override val lastChangeDate: String?
+):BaseEntity()

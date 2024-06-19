@@ -8,11 +8,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Campaign(
-    @ColumnInfo(name = "name")          val name: String?,
-    @ColumnInfo(name = "lastChangeDate")val lastChangeDate: String?
-){
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
+    override val name: String?,
+    override val lastChangeDate: String?
+): BaseEntity() {
     @Ignore
     var isExpanded = false
 }

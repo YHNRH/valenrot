@@ -1,8 +1,12 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.fragment.app.FragmentTransaction
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Race
@@ -23,9 +27,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<TextView>(R.id.menu_roll).setOnClickListener{toRollFragment()}
-        findViewById<TextView>(R.id.menu_races).setOnClickListener {toRaceListFragment()}
-        findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {toCampaignListFragment()}
+        findViewById<TextView>(R.id.menu_roll).setOnClickListener{v -> toRollFragment(v)}
+        findViewById<TextView>(R.id.menu_races).setOnClickListener {v -> toRaceListFragment(v)}
+        findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {v -> toCampaignListFragment(v)}
 
         if (savedInstanceState == null) {
             val fragmentTransaction: FragmentTransaction = supportFragmentManager
@@ -35,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun toRollFragment (){
+    fun toRollFragment (v: View){
         val fragment = supportFragmentManager
             .findFragmentByTag(MAIN_FRAGMENT)
 
@@ -48,10 +52,11 @@ class MainActivity : AppCompatActivity() {
                 MAIN_FRAGMENT
             )
             fragmentTransaction.commit()
+            changeMenuButtonColor(v)
         }
     }
 
-    fun toRaceListFragment(){
+    fun toRaceListFragment(v:View? = null){
         val fragment = supportFragmentManager
             .findFragmentByTag(RACELIST_FRAGMENT)
 
@@ -64,9 +69,10 @@ class MainActivity : AppCompatActivity() {
                 RACELIST_FRAGMENT
             )
             fragmentTransaction.commit()
+            changeMenuButtonColor(v)
         }
     }
-    fun toCampaignListFragment(){
+    fun toCampaignListFragment(v:View? = null){
         val fragment = supportFragmentManager
             .findFragmentByTag(CAMPAIGNLIST_FRAGMENT)
 
@@ -79,6 +85,16 @@ class MainActivity : AppCompatActivity() {
                 CAMPAIGNLIST_FRAGMENT
             )
             fragmentTransaction.commit()
+            changeMenuButtonColor(v)
+        }
+    }
+
+    fun changeMenuButtonColor(v:View?){
+        if (v !== null) {
+            (v.parent as LinearLayout).children.forEach { v ->
+                v.setBackgroundColor(ContextCompat.getColor(this, R.color.teal_200))
+            }
+            v.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_200))
         }
     }
     fun toRaceEditFragment(race: Race){

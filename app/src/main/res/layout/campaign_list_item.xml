@@ -32,12 +32,13 @@
                 android:textStyle="bold"
                 android:id="@+id/delete"/>
             </LinearLayout>
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="30dp"
                 android:layout_gravity="end|center"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:id="@+id/expand"
-                android:text="expand"/>
+                android:src="@drawable/expand"
+                />
         </FrameLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list"

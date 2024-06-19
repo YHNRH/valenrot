@@ -1,18 +1,23 @@
 package com.example.myapplication.core.room.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
 
 
-@Entity
+@Entity(foreignKeys = [
+        ForeignKey(entity = Race::class,
+            parentColumns = ["uid"],
+            childColumns = ["raceId"],
+            onDelete = CASCADE),
+        ForeignKey(entity = Campaign::class,
+            parentColumns = ["uid"],
+            childColumns = ["campaignId"],
+            onDelete = CASCADE)])
 data class Character(
-    @ColumnInfo(name = "raceId")            val raceId: Int?,
-    @ColumnInfo(name = "name")              val name: String?,
-    @ColumnInfo(name = "campaignId")        val campaignId: Int?,
-    @ColumnInfo(name = "temper")            val temper: Int?,
-    @ColumnInfo(name = "lastChangeDate")    val lastChangeDate: String?
-){
-    @PrimaryKey(autoGenerate = true)
-    var uid: Int = 0
-}
+    val raceId: Int?,
+    val campaignId: Int?,
+    val temper: Int?,
+    override val name: String?,
+    override val lastChangeDate: String?
+) : BaseEntity()

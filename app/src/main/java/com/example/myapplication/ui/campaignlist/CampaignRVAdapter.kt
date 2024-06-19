@@ -1,9 +1,13 @@
 package com.example.myapplication.ui.campaignlist
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -30,7 +34,7 @@ class CampaignRVAdapter(
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val noteTV = itemView.findViewById<TextView>(R.id.name)
             val deleteIV = itemView.findViewById<TextView>(R.id.delete)
-            val expandBtn = itemView.findViewById<TextView>(R.id.expand)
+            val expandBtn = itemView.findViewById<ImageView>(R.id.expand)
 
         }
 
@@ -66,6 +70,18 @@ class CampaignRVAdapter(
 
             characterRV.visibility = if (allCampaigns[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
 
+            if (allCampaigns[position].isExpanded){
+                val bitmap = BitmapFactory.decodeResource(
+                    context.resources,
+                    R.drawable.expand
+                )
+                val cx = bitmap.width / 2f
+                val cy = bitmap.height / 2f
+                val flippedBitmap = bitmap.flip(1f, -1f, cx, cy)
+                holder.expandBtn.setImageBitmap(flippedBitmap)
+            } else {
+                holder.expandBtn.setImageResource(R.drawable.expand)
+            }
             holder.expandBtn.setOnClickListener {
                 allCampaigns[position].isExpanded = !allCampaigns[position].isExpanded
                 notifyDataSetChanged()
@@ -86,6 +102,10 @@ class CampaignRVAdapter(
     override fun onDeleteIconClick(character: Character) {
         characterViewModel.deleteCharacter(character)
         Toast.makeText(context, "${character.name} Deleted", Toast.LENGTH_LONG).show()
+    }
+    private fun Bitmap.flip(x: Float, y: Float, cx: Float, cy: Float): Bitmap {
+        val matrix = Matrix().apply { postScale(x, y, cx, cy) }
+        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 }
 

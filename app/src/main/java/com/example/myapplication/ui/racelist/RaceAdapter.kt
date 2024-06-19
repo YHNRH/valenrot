@@ -19,8 +19,7 @@ class RaceAdapter(
         private val allRaces = ArrayList<Race>()
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val noteTV = itemView.findViewById<TextView>(R.id.name)
-            val dateTV = itemView.findViewById<TextView>(R.id.health)
+            val nameTV = itemView.findViewById<TextView>(R.id.name)
             val deleteIV = itemView.findViewById<TextView>(R.id.delete)
         }
 
@@ -33,8 +32,7 @@ class RaceAdapter(
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.noteTV.setText(allRaces[position].name)
-            holder.dateTV.setText("Last Updated : " + allRaces.get(position).health)
+            holder.nameTV.setText(allRaces[position].name)
             holder.deleteIV.setOnClickListener {
                 raceClickDeleteInterface.onDeleteIconClick(allRaces[position])
             }
