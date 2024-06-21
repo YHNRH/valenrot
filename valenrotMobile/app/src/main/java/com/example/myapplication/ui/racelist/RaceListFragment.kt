@@ -13,16 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Race
-import com.example.myapplication.ui.dialog.DeleteDialogFragment
+import com.example.myapplication.ui.interfaces.AbstractListFragment
 import com.example.myapplication.viewmodel.RaceViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class RaceListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterface,
-    DeleteDialogFragment.DialogListener {
+class RaceListFragment : AbstractListFragment<Race>(), RaceClickInterface{
 
-    lateinit var viewModel: RaceViewModel
     private lateinit var racesRV: RecyclerView
     lateinit var addFAB: FloatingActionButton
 
@@ -45,13 +43,13 @@ class RaceListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterfac
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[RaceViewModel::class.java]
 
-        viewModel.allRaces.observe(this.requireActivity()) { list ->
+        viewModel.allEntities.observe(this.requireActivity()) { list ->
             list?.let {
                 raceRVAdapter.updateList(it)
             }
         }
         addFAB.setOnClickListener {
-            viewModel.addRace(Race(
+            viewModel.add(Race(
                 1,
                 3,
                 54,
@@ -75,15 +73,12 @@ class RaceListFragment : Fragment(), RaceClickInterface, RaceClickDeleteInterfac
         (activity as MainActivity).toRaceEditFragment(race)
     }
 
-    lateinit var raceToDelete: Race
-    override fun onDeleteIconClick(race: Race) {
-        raceToDelete = race
-        DeleteDialogFragment().setListener(this).setEntity(race).show(parentFragmentManager, "DELETE_DIALOG")
-    }
-
     override fun onDialogPositiveClick(dialog: DialogFragment) {
-        viewModel.deleteRace(raceToDelete)
-        Toast.makeText(requireContext(), "${raceToDelete.name} deleted", Toast.LENGTH_LONG).show()
+        entityToDelete?.let {
+            viewModel.delete(it)
+            Toast.makeText(requireContext(), "${it.name} deleted", Toast.LENGTH_LONG).show()
+        }
+
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {}

@@ -9,23 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Campaign
-import com.example.myapplication.core.room.entity.Character
+import com.example.myapplication.ui.interfaces.DeleteEntityInterface
 import com.example.myapplication.viewmodel.CharacterViewModel
 
 class CampaignRVAdapter(
     val context: Context,
     private val characterViewModel : CharacterViewModel,
     private val activity : Fragment,
-    private val campaignClickDeleteInterface: CampaignClickDeleteInterface,
+    private val campaignClickDeleteInterface: DeleteEntityInterface<Campaign>,
     private val campaignClickInterface: CampaignClickInterface
     ) :
-        RecyclerView.Adapter<CampaignRVAdapter.ViewHolder>(), CharacterClickDeleteInterface{
+        RecyclerView.Adapter<CampaignRVAdapter.ViewHolder>(){
 
         private val allCampaigns = ArrayList<Campaign>()
         private lateinit var characterRV: RecyclerView
@@ -50,7 +49,8 @@ class CampaignRVAdapter(
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             characterRV = holder.itemView.findViewById(R.id.list)
             characterRV.layoutManager = LinearLayoutManager(context)
-            val characterRVAdapter = CharacterRVAdapter(context, this)
+            val characterRVAdapter = CharacterRVAdapter(context//,this
+                     )
 
             characterRV.adapter = characterRVAdapter
             characterViewModel.allCharacters.observe(activity) { list ->
@@ -61,7 +61,7 @@ class CampaignRVAdapter(
 
             holder.noteTV.text = allCampaigns[position].name
             holder.deleteIV.setOnClickListener {
-                campaignClickDeleteInterface.onDeleteIconClick(allCampaigns[position])
+                campaignClickDeleteInterface.onDeleteClick(allCampaigns[position])
             }
             holder.itemView.setOnClickListener {
                 campaignClickInterface.onCampaignClick(allCampaigns[position])
@@ -99,19 +99,12 @@ class CampaignRVAdapter(
             notifyDataSetChanged()
         }
 
-    override fun onDeleteIconClick(character: Character) {
-        characterViewModel.deleteCharacter(character)
-        Toast.makeText(context, "${character.name} Deleted", Toast.LENGTH_LONG).show()
-    }
+
     private fun Bitmap.flip(x: Float, y: Float, cx: Float, cy: Float): Bitmap {
         val matrix = Matrix().apply { postScale(x, y, cx, cy) }
         return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
     }
 }
-
-    interface CampaignClickDeleteInterface {
-        fun onDeleteIconClick(campaign: Campaign)
-    }
 
     interface CampaignClickInterface {
         fun onCampaignClick(campaign: Campaign)

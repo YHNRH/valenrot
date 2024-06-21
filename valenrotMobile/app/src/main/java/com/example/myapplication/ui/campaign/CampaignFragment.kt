@@ -54,7 +54,7 @@ class CampaignFragment : Fragment() {
                         name,
                         currentDateAndTime)
                     updatedCampaign.uid = campaignID
-                    viewModel.updateCampaign(updatedCampaign)
+                    viewModel.update(updatedCampaign)
                     Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
             } else {
                     val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
@@ -63,7 +63,7 @@ class CampaignFragment : Fragment() {
                        // description,
                         name,
                         currentDateAndTime)
-                    viewModel.updateCampaign(insertCampaign)
+                    viewModel.update(insertCampaign)
                     Toast.makeText(activity, "${insertCampaign.name} Added", Toast.LENGTH_LONG).show()
             }
             (activity as MainActivity).toCampaignListFragment()

@@ -1,9 +1,6 @@
 package com.example.myapplication.core.room.entity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
-
 
 @Entity
 data class Race(
@@ -18,6 +15,6 @@ data class Race(
     val accuracy: Int?,
     val damage: Int?,
     val description: String?,
-    override val name: String?,
-    override val lastChangeDate: String?
+    override var name: String?,
+    override var lastChangeDate: String?
 ):BaseEntity()

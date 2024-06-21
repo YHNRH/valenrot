@@ -1,9 +1,9 @@
-package com.example.myapplication.core.retrofit
+package com.example.myapplication.core.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitClient {
+object ApiClient {
     private var retrofit: Retrofit? = null
 
     fun getClient(baseUrl: String): Retrofit {

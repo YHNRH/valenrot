@@ -93,7 +93,7 @@ class RaceFragment : Fragment() {
                         name,
                         currentDateAndTime)
                     updatedRace.uid = raceID
-                    viewModel.updateRace(updatedRace)
+                    viewModel.update(updatedRace)
                     Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
             } else {
                     val insertRace = Race(
@@ -110,7 +110,7 @@ class RaceFragment : Fragment() {
                         description,
                         name,
                         SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()))
-                    viewModel.addRace(insertRace)
+                    viewModel.add(insertRace)
                     Toast.makeText(activity, "${insertRace.name} Added", Toast.LENGTH_LONG).show()
             }
             (activity as MainActivity).toRaceListFragment()
@@ -138,7 +138,5 @@ class RaceFragment : Fragment() {
             raceID = -1
             saveBtn.text = "Save Note"
         }
-        //val vm = viewModel.getRaceViewModel(pos)
-        //view?.findViewById<EditText>(R.id.name)?.setText(vm.model.name)
     }
 }

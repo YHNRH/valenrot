@@ -21,7 +21,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.myapplication.R
-import com.example.myapplication.core.retrofit.Common
+import com.example.myapplication.core.api.Common
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
 import com.example.myapplication.core.room.entity.Race
@@ -50,8 +50,7 @@ class RollFragment : Fragment() {
     private lateinit var rollTemperTV : TextView
     private lateinit var rolledRace : Race
     private var rolledTemper = 0
-    private var mService = Common.rollNameService
-    private var instructionService = Common.instructionService
+    private var apiService = Common.apiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +91,7 @@ class RollFragment : Fragment() {
 
         val adapter = CampaignSpinnerAdapter(requireContext())
         spinner.adapter = adapter
-        campaignViewModel.allCampaigns.observe(this.requireActivity()) { list ->
+        campaignViewModel.allEntities.observe(this.requireActivity()) { list ->
             list?.let {
                 adapter.updateList(it)
             }
@@ -181,7 +180,7 @@ class RollFragment : Fragment() {
     }
 
     private fun rollRace(){
-            raceViewModel.allRaces.observe(this.requireActivity()) { list ->
+            raceViewModel.allEntities.observe(this.requireActivity()) { list ->
                 list?.let {
                     if (list.isNotEmpty()) {
                         val rnd = Random.nextInt(1, list.size + 1)
@@ -209,16 +208,16 @@ class RollFragment : Fragment() {
     }
 
     private fun rollName(){
-        mService.getRandomNames().enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
+        apiService.getRandomNames().enqueue(object : Callback<Array<String>> {
+            override fun onFailure(call: Call<Array<String>>, t: Throwable) {
                 Toast.makeText(requireContext(),
                     "Ошибка рандомайзера имени!",
                     Toast.LENGTH_SHORT).show()
             }
 
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+            override fun onResponse(call: Call<Array<String>>, response: Response<Array<String>>) {
                 if (response.body() != null){
-                    val names = response.body()!!.split("<br>")
+                    val names = response.body()!!
                     val value = names[Random.nextInt(names.size)]
                     nameET.setText(value)
                 }
@@ -227,7 +226,6 @@ class RollFragment : Fragment() {
     }
 
     private fun save() {
-
         if (this::rolledRace.isInitialized && rolledTemper != 0 && spinner.selectedItem !== null){
             val campaign =  spinner.selectedItem as Campaign
             val name     =  nameET.text.toString()
@@ -253,22 +251,23 @@ class RollFragment : Fragment() {
     }
 
     private fun uploadInstruction(){
-
-        instructionService.uploadInstruction().enqueue(object : Callback<String> {
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Toast.makeText(requireContext(),
-                    "Ошибка рандомайзера имени!",
-                    Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                if (response.body() != null){
-                    val names = response.body()!!.split("<br>")
-                    val value = names[Random.nextInt(names.size)]
-                    nameET.setText(value)
+        raceViewModel.allEntities.observe(this.requireActivity()) { list ->
+            apiService.uploadInstruction(list).enqueue(object : Callback<String> {
+                override fun onFailure(call: Call<String>, t: Throwable) {
+                    Toast.makeText(requireContext(),
+                        "Ошибка рандомайзера имени!",
+                        Toast.LENGTH_SHORT).show()
                 }
-            }
-        })
+
+                override fun onResponse(call: Call<String>, response: Response<String>) {
+                    if (response.body() != null){
+                        val names = response.body()!!.split("<br>")
+                        val value = names[Random.nextInt(names.size)]
+                        nameET.setText(value)
+                    }
+                }
+            })
+        }
     }
 
 }

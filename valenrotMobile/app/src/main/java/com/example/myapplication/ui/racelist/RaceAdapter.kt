@@ -1,18 +1,19 @@
 package com.example.myapplication.ui.racelist
 
 import android.content.Context
-    import android.view.LayoutInflater
-    import android.view.View
-    import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-    import androidx.recyclerview.widget.RecyclerView
-    import com.example.myapplication.R
-    import com.example.myapplication.core.room.entity.Race
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
+import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.ui.interfaces.DeleteEntityInterface
 
 class RaceAdapter(
     val context: Context,
-    private val raceClickDeleteInterface: RaceClickDeleteInterface,
+    private val raceClickDeleteInterface: DeleteEntityInterface<Race>,
     private val raceClickInterface: RaceClickInterface
     ) :
         RecyclerView.Adapter<RaceAdapter.ViewHolder>() {
@@ -33,9 +34,9 @@ class RaceAdapter(
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.nameTV.setText(allRaces[position].name)
+            holder.nameTV.text = allRaces[position].name
             holder.deleteIV.setOnClickListener {
-                raceClickDeleteInterface.onDeleteIconClick(allRaces[position])
+                raceClickDeleteInterface.onDeleteClick(allRaces[position])
             }
             holder.itemView.setOnClickListener {
                 raceClickInterface.onRaceClick(allRaces[position])
@@ -51,10 +52,6 @@ class RaceAdapter(
             allRaces.addAll(newList)
             notifyDataSetChanged()
         }
-    }
-
-    interface RaceClickDeleteInterface {
-        fun onDeleteIconClick(race: Race)
     }
 
     interface RaceClickInterface {

@@ -7,16 +7,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
-import com.example.myapplication.core.room.entity.BaseEntity
+import com.example.myapplication.ui.interfaces.DialogListener
 
-class DeleteDialogFragment : DialogFragment() {
+class DeleteDialogFragment<T> : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
             val view = inflater.inflate(R.layout.dialog_delete, null)
-            view.findViewById<TextView>(R.id.text).text = "Вы действительно хотите удалить ${entity.name}?"
+            view.findViewById<TextView>(R.id.text).text = "Вы действительно хотите удалить ${entity}?"
             builder.setView(view)
                 .setPositiveButton("Подтвердить"
                 ) { dialog, id ->
@@ -33,12 +33,7 @@ class DeleteDialogFragment : DialogFragment() {
 
     internal lateinit var listener: DialogListener
 
-    interface DialogListener {
-        fun onDialogPositiveClick(dialog: DialogFragment)
-        fun onDialogNegativeClick(dialog: DialogFragment)
-    }
-
-    fun setListener(listener: Fragment): DeleteDialogFragment {
+    fun setListener(listener: Fragment): DeleteDialogFragment<T> {
         try {
             this.listener = listener as DialogListener
         } catch (e: ClassCastException) {
@@ -48,9 +43,9 @@ class DeleteDialogFragment : DialogFragment() {
         return this
     }
 
-    lateinit var entity:BaseEntity
+    var entity: T? = null
 
-    fun setEntity(entity: BaseEntity): DeleteDialogFragment {
+    fun setEntity(entity: T): DeleteDialogFragment<T> {
         this.entity = entity
         return this
     }

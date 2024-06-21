@@ -4,17 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.myapplication.core.room.dao.RaceDao
 import com.example.myapplication.core.room.entity.Race
 
-class RaceRepository(private val raceDao: RaceDao) {
+class RaceRepository(dao: RaceDao) : BaseRepository<Race>(dao)  {
 
-    val allNotes: LiveData<List<Race>> = raceDao.getAllRaces()
-
-    suspend fun insert(race: Race) {
-        raceDao.insert(race)
-    }
-    suspend fun delete(race: Race){
-        raceDao.delete(race)
-    }
-    suspend fun update(race: Race){
-        raceDao.update(race)
-    }
+    val allRaces: LiveData<List<Race>> = dao.getAllRaces()
 }
