@@ -9,15 +9,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.MainActivity
-
 import com.example.myapplication.R
+import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.viewmodel.RaceViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class RaceFragment : Fragment() {
+class RaceFragment : AbstractEditFragment(){
 
     //region VIEWS
     lateinit var saveBtn: Button
@@ -37,6 +37,7 @@ class RaceFragment : Fragment() {
     private lateinit var viewModel: RaceViewModel
 
     private var raceID = -1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -113,13 +114,13 @@ class RaceFragment : Fragment() {
                     viewModel.add(insertRace)
                     Toast.makeText(activity, "${insertRace.name} Added", Toast.LENGTH_LONG).show()
             }
-            (activity as MainActivity).toRaceListFragment()
+            //(activity as MainActivity).toRaceListFragment()
         }
         return fragment
     }
-
-    fun refresh(race: Race?) {
-        if (race != null) {
+    override fun refresh(entity: BaseEntity?) {
+        if (entity != null) {
+            val race = entity as Race
             raceID = race.uid
             saveBtn.text = "Update Note"
             strengthET.setText(race.strength.toString())

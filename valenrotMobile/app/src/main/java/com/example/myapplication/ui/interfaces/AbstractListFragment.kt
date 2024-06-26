@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import com.example.myapplication.ui.dialog.DeleteDialogFragment
 import com.example.myapplication.viewmodel.BaseViewModel
 
-abstract class AbstractListFragment<T>:Fragment(), DeleteEntityInterface<T>, DialogListener {
+abstract class AbstractListFragment<T>:
+    Fragment(),
+    OnDeleteEntityInterface<T>,
+    OnClickEntityInterface<T>,
+    DialogListener {
     var entityToDelete: T? = null
     lateinit var viewModel: BaseViewModel<T>
 

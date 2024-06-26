@@ -20,12 +20,6 @@ class CharacterViewModel(application: Application) : AndroidViewModel(applicatio
         repository = CharacterRepository(dao)
         allCharacters = repository.allCharacters
     }
-    fun deleteCharacter(character: Character) = viewModelScope.launch(Dispatchers.IO) {
-        repository.delete(character)
-    }
-    fun updateCharacter(character: Character) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(character)
-    }
     fun addCharacter(character: Character) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(character)
     }

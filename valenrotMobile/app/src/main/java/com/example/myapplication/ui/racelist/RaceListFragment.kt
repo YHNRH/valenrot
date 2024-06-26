@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,26 +16,29 @@ import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.ui.interfaces.AbstractListFragment
 import com.example.myapplication.viewmodel.RaceViewModel
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.example.myapplication.viewmodel.SubraceViewModel
 
-class RaceListFragment : AbstractListFragment<Race>(), RaceClickInterface{
+class RaceListFragment : AbstractListFragment<Race>(){
 
     private lateinit var racesRV: RecyclerView
-    lateinit var addFAB: FloatingActionButton
-
+    private lateinit var addBtn: ImageView
+    private lateinit var subraceViewModel:SubraceViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val fragment = inflater.inflate(R.layout.fragment_racelist, container, false)
         racesRV = fragment.findViewById(R.id.list)
-        addFAB = fragment.findViewById(R.id.idFAB)
+        addBtn = fragment.findViewById(R.id.addBtn)
 
         racesRV.layoutManager = LinearLayoutManager(requireActivity())
 
-        val raceRVAdapter = RaceAdapter(requireActivity(), this, this)
+        subraceViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[SubraceViewModel::class.java]
+
+        val raceRVAdapter = RaceAdapter(this, subraceViewModel)
 
         racesRV.adapter = raceRVAdapter
 
@@ -48,38 +52,14 @@ class RaceListFragment : AbstractListFragment<Race>(), RaceClickInterface{
                 raceRVAdapter.updateList(it)
             }
         }
-        addFAB.setOnClickListener {
-            viewModel.add(Race(
-                1,
-                3,
-                54,
-                5,
-                1,
-                1,
-                1,
-                1,
-                1,
-                1,
-                "Описание",
-                "Новая раса",
-                SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
-            ))
-            Toast.makeText(this.requireContext(), "test Added", Toast.LENGTH_LONG).show()
+        addBtn.setOnClickListener {
+            viewModel.add(Race.default())
+            Toast.makeText(this.requireContext(), "Раса добавлена", Toast.LENGTH_LONG).show()
         }
         return fragment
     }
 
-    override fun onRaceClick(race: Race) {
-        (activity as MainActivity).toRaceEditFragment(race)
+    override fun onClick(entity: Race) {
+        (activity as MainActivity).toEditFragment(entity)
     }
-
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-        entityToDelete?.let {
-            viewModel.delete(it)
-            Toast.makeText(requireContext(), "${it.name} deleted", Toast.LENGTH_LONG).show()
-        }
-
-    }
-
-    override fun onDialogNegativeClick(dialog: DialogFragment) {}
 }

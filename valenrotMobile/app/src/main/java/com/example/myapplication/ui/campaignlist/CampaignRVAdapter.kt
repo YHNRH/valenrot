@@ -1,28 +1,21 @@
 package com.example.myapplication.ui.campaignlist
 
-import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.core.common.flip
 import com.example.myapplication.core.room.entity.Campaign
-import com.example.myapplication.ui.interfaces.DeleteEntityInterface
 import com.example.myapplication.viewmodel.CharacterViewModel
 
 class CampaignRVAdapter(
-    val context: Context,
+    private val activity : CampaignListFragment,
     private val characterViewModel : CharacterViewModel,
-    private val activity : Fragment,
-    private val campaignClickDeleteInterface: DeleteEntityInterface<Campaign>,
-    private val campaignClickInterface: CampaignClickInterface
     ) :
         RecyclerView.Adapter<CampaignRVAdapter.ViewHolder>(){
 
@@ -32,14 +25,14 @@ class CampaignRVAdapter(
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val noteTV = itemView.findViewById<TextView>(R.id.name)
-            val deleteIV = itemView.findViewById<TextView>(R.id.delete)
+            val deleteIV = itemView.findViewById<ImageView>(R.id.delete)
             val expandBtn = itemView.findViewById<ImageView>(R.id.expand)
 
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = LayoutInflater.from(parent.context).inflate(
-                R.layout.campaign_list_item,
+                R.layout.list_item_campaign,
                 parent, false
             )
 
@@ -48,9 +41,8 @@ class CampaignRVAdapter(
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             characterRV = holder.itemView.findViewById(R.id.list)
-            characterRV.layoutManager = LinearLayoutManager(context)
-            val characterRVAdapter = CharacterRVAdapter(context//,this
-                     )
+            characterRV.layoutManager = LinearLayoutManager(activity.requireContext())
+            val characterRVAdapter = CharacterRVAdapter(activity.requireContext())
 
             characterRV.adapter = characterRVAdapter
             characterViewModel.allCharacters.observe(activity) { list ->
@@ -61,10 +53,10 @@ class CampaignRVAdapter(
 
             holder.noteTV.text = allCampaigns[position].name
             holder.deleteIV.setOnClickListener {
-                campaignClickDeleteInterface.onDeleteClick(allCampaigns[position])
+                activity.onDeleteClick(allCampaigns[position])
             }
             holder.itemView.setOnClickListener {
-                campaignClickInterface.onCampaignClick(allCampaigns[position])
+                activity.onClick(allCampaigns[position])
             }
 
 
@@ -72,7 +64,7 @@ class CampaignRVAdapter(
 
             if (allCampaigns[position].isExpanded){
                 val bitmap = BitmapFactory.decodeResource(
-                    context.resources,
+                    activity.resources,
                     R.drawable.expand_icon
                 )
                 val cx = bitmap.width / 2f
@@ -98,14 +90,4 @@ class CampaignRVAdapter(
             allCampaigns.addAll(newList)
             notifyDataSetChanged()
         }
-
-
-    private fun Bitmap.flip(x: Float, y: Float, cx: Float, cy: Float): Bitmap {
-        val matrix = Matrix().apply { postScale(x, y, cx, cy) }
-        return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-    }
 }
-
-    interface CampaignClickInterface {
-        fun onCampaignClick(campaign: Campaign)
-    }

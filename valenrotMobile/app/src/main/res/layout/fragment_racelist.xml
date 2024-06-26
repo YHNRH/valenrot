@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/race_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.racelist.RaceListFragment">
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        tools:listitem="@layout/race_list_item" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/idFAB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom |right"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_launcher_background"
-        app:backgroundTint="@color/purple_700"
-        app:tint="@color/white" />
-
-
-</FrameLayout>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:listitem="@layout/list_item_race" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="33sp"
+        android:padding="3sp"
+        android:src="@drawable/add_icon"
+        android:textAlignment="center"
+        android:textColor="#FF0000"
+        android:background="#52949494"
+        android:id="@+id/addBtn" />
+</LinearLayout>

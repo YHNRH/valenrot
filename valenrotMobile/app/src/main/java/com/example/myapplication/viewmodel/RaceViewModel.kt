@@ -12,4 +12,5 @@ class RaceViewModel(application: Application) : BaseViewModel<Race>(application)
     override var dao: BaseDao<Race> = AppDatabase.getDatabase(application).getRaceDao()
     override var repository: BaseRepository<Race> = RaceRepository(dao as RaceDao)
     override var allEntities = (repository as RaceRepository).allRaces
+    var allRacesWithSubraces = (repository as RaceRepository).allRacesWithSubraces
 }

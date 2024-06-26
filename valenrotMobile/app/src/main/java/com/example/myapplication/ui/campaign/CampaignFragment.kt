@@ -9,15 +9,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.MainActivity
-
 import com.example.myapplication.R
+import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Campaign
+import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.viewmodel.CampaignViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class CampaignFragment : Fragment() {
+class CampaignFragment : AbstractEditFragment() {
 
     //region VIEWS
     lateinit var saveBtn: Button
@@ -27,6 +27,8 @@ class CampaignFragment : Fragment() {
     private lateinit var viewModel: CampaignViewModel
 
     private var campaignID = -1
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,13 +68,13 @@ class CampaignFragment : Fragment() {
                     viewModel.update(insertCampaign)
                     Toast.makeText(activity, "${insertCampaign.name} Added", Toast.LENGTH_LONG).show()
             }
-            (activity as MainActivity).toCampaignListFragment()
+            //(activity as MainActivity).toCampaignListFragment()
         }
         return fragment
     }
-
-    fun refresh(campaign: Campaign?) {
-        if (campaign != null) {
+    override fun refresh(entity: BaseEntity?) {
+        if (entity != null) {
+            val campaign = entity as Campaign
             campaignID = campaign.uid
             saveBtn.text = "Update Note"
             //descriptionET.setText(campaign.description)
@@ -81,5 +83,6 @@ class CampaignFragment : Fragment() {
             campaignID = -1
             saveBtn.text = "Save Note"
         }
+
     }
 }

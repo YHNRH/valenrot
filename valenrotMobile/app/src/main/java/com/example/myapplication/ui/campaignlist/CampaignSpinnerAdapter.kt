@@ -45,7 +45,7 @@ class CampaignSpinnerAdapter(
         private class ViewHolder {
             companion object {
                 @LayoutRes
-                val LAYOUT = R.layout.race_list_item
+                val LAYOUT = R.layout.list_item_race
             }
         }
 

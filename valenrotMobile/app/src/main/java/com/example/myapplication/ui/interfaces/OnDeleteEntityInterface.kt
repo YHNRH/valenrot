@@ -1,5 +1,5 @@
 package com.example.myapplication.ui.interfaces
 
-interface DeleteEntityInterface<T> {
+interface OnDeleteEntityInterface<T> {
         fun onDeleteClick(entity: T)
 }

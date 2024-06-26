@@ -25,6 +25,7 @@ import com.example.myapplication.core.api.Common
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
 import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.core.room.entity.RaceWithSubraces
 import com.example.myapplication.ui.campaignlist.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
@@ -52,12 +53,6 @@ class RollFragment : Fragment() {
     private var rolledTemper = 0
     private var apiService = Common.apiService
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +61,7 @@ class RollFragment : Fragment() {
         fragment.findViewById<Button>(R.id.roll_btn).setOnClickListener {view -> roll(view)}
         fragment.findViewById<Button>(R.id.save_btn).setOnClickListener { save()}
         fragment.findViewById<TextView>(R.id.uploadBtn).setOnClickListener { uploadInstruction()}
+        fragment.findViewById<TextView>(R.id.downloadBtn).setOnClickListener { downloadInstruction()}
         nameET = fragment.findViewById(R.id.name)
         rollRaceNumberTV = fragment.findViewById(R.id.roll_tw)
         rollTemperNumberTV = fragment.findViewById(R.id.roll_tw1)
@@ -251,23 +247,40 @@ class RollFragment : Fragment() {
     }
 
     private fun uploadInstruction(){
-        raceViewModel.allEntities.observe(this.requireActivity()) { list ->
+        raceViewModel.allRacesWithSubraces.observe(this.requireActivity()) { list ->
             apiService.uploadInstruction(list).enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Toast.makeText(requireContext(),
-                        "Ошибка рандомайзера имени!",
+                        "Ошибка выгрузки инструкции!",
                         Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onResponse(call: Call<String>, response: Response<String>) {
-                    if (response.body() != null){
-                        val names = response.body()!!.split("<br>")
-                        val value = names[Random.nextInt(names.size)]
-                        nameET.setText(value)
-                    }
+                    Toast.makeText(requireContext(),
+                        "Инструкция успешно выгружена",
+                        Toast.LENGTH_SHORT).show()
                 }
             })
         }
+    }
+    private fun downloadInstruction(){
+        apiService.downloadInstruction().enqueue(object : Callback<List<RaceWithSubraces>> {
+            override fun onResponse(
+                p0: Call<List<RaceWithSubraces>>,
+                p1: Response<List<RaceWithSubraces>>
+            ) {
+                Toast.makeText(requireContext(),
+                    "Инструкция успешно скачана",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(p0: Call<List<RaceWithSubraces>>, p1: Throwable) {
+                Toast.makeText(requireContext(),
+                    "Ошибка скачивания инструкции!",
+                    Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
 }

@@ -31,7 +31,7 @@ class DeleteDialogFragment<T> : DialogFragment() {
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    internal lateinit var listener: DialogListener
+    private lateinit var listener: DialogListener
 
     fun setListener(listener: Fragment): DeleteDialogFragment<T> {
         try {
