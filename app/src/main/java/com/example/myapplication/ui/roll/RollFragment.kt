@@ -31,6 +31,7 @@ import com.example.myapplication.ui.campaignlist.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.example.myapplication.viewmodel.RaceViewModel
+import com.example.myapplication.viewmodel.SectionViewModel
 import com.example.myapplication.viewmodel.SubraceViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,6 +47,7 @@ class RollFragment : Fragment() {
     private lateinit var subraceViewModel: SubraceViewModel
     private lateinit var campaignViewModel: CampaignViewModel
     private lateinit var characterViewModel: CharacterViewModel
+    private lateinit var sectionViewModel: SectionViewModel
     private lateinit var spinner:Spinner
     private lateinit var nameET:EditText
     private lateinit var rollRaceNumberTV : TextView
@@ -90,6 +92,11 @@ class RollFragment : Fragment() {
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[SubraceViewModel::class.java]
+
+        sectionViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[SectionViewModel::class.java]
 
         spinner = fragment.findViewById(R.id.spinner)
 
@@ -255,7 +262,7 @@ class RollFragment : Fragment() {
     }
 
     private fun uploadInstruction(){
-        raceViewModel.allRacesWithSubraces.observeOnce(this.requireActivity()) { list ->
+        sectionViewModel.allEntities.observeOnce(this.requireActivity()) { list ->
             apiService.uploadInstruction(list).enqueue(object : Callback<String> {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Toast.makeText(requireContext(),

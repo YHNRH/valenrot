@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.subrace
+package com.example.myapplication.ui.instruction
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,25 +14,25 @@ import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.core.common.Consts
 import com.example.myapplication.core.room.entity.BaseEntity
+import com.example.myapplication.core.room.entity.Section
 import com.example.myapplication.core.room.entity.Subrace
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
+import com.example.myapplication.viewmodel.SectionViewModel
 import com.example.myapplication.viewmodel.SubraceViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class SubraceFragment : AbstractEditFragment() {
+class SectionFragment : AbstractEditFragment<Section>() {
 
     //region VIEWS
-    lateinit var saveBtn: Button
-    lateinit var activeAbilityET: EditText
-    lateinit var passiveAbilityET: EditText
-    lateinit var descriptionET: EditText
-    lateinit var nameET: EditText
+    private lateinit var saveBtn: Button
+    private lateinit var textET: EditText
+    private lateinit var nameET: EditText
     //endregion
-    private lateinit var viewModel: SubraceViewModel
 
-    private var subraceID = Long.MIN_VALUE
-    private var raceID = Long.MIN_VALUE
+
+    private var sectionId = Long.MIN_VALUE
+    private var parentId: Long? = Long.MIN_VALUE
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,38 +41,32 @@ class SubraceFragment : AbstractEditFragment() {
             .onBackPressedDispatcher
             .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    (requireActivity() as MainActivity).toFragment(Consts.FragmentTags.RACELIST_FRAGMENT)
+                    (requireActivity() as MainActivity).toFragment(Consts.FragmentTags.INSTRUCTION_FRAGMENT)
                 }
             })
-        val fragment = inflater.inflate(R.layout.fragment_subraceedit, container, false)
+        val fragment = inflater.inflate(R.layout.fragment_sectionedit, container, false)
 
         viewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[SubraceViewModel::class.java]
+        )[SectionViewModel::class.java]
         //region VIEWS
         saveBtn = fragment.findViewById(R.id.save)
-        activeAbilityET = fragment.findViewById(R.id.active_ability)
-        passiveAbilityET = fragment.findViewById(R.id.passive_ability)
-        descriptionET = fragment.findViewById(R.id.description)
+        textET = fragment.findViewById(R.id.text)
         nameET = fragment.findViewById(R.id.name)
         //endregion
 
         saveBtn.setOnClickListener {
-            val activeAbility = activeAbilityET.text.toString()
-            val passiveAbility = passiveAbilityET.text.toString()
-            val description = descriptionET.text.toString()
+            val description = textET.text.toString()
             val name = nameET.text.toString()
-            if (subraceID != Long.MIN_VALUE) {
-                    val updatedRace = Subrace(
+            if (sectionId != Long.MIN_VALUE) {
+                    val updatedRace = Section(
                         name,
                         description,
-                        activeAbility,
-                        passiveAbility,
-                        raceID,
+                        parentId,
                         SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
                     )
-                    updatedRace.uid = subraceID
+                    updatedRace.uid = sectionId
                     viewModel.update(updatedRace)
                     Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
             }
@@ -83,14 +77,12 @@ class SubraceFragment : AbstractEditFragment() {
 
     override fun refresh(entity: BaseEntity?) {
         if (entity != null) {
-            val subrace = entity as Subrace
-            subraceID = subrace.uid
-            raceID = subrace.raceId
+            val section = entity as Section
+            sectionId = section.uid
+            parentId = section.parentId
             saveBtn.text = "Update Note"
-            passiveAbilityET.setText(subrace.passiveAbility)
-            activeAbilityET.setText(subrace.activeAbility)
-            descriptionET.setText(subrace.description)
-            nameET.setText(subrace.name)
+            nameET.setText(section.name)
+            textET.setText(section.text)
         }
     }
 }

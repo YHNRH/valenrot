@@ -20,7 +20,7 @@ import com.example.myapplication.viewmodel.RaceViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class RaceFragment : AbstractEditFragment(){
+class RaceFragment : AbstractEditFragment<Race>(){
 
     //region VIEWS
     lateinit var saveBtn: Button
@@ -37,7 +37,6 @@ class RaceFragment : AbstractEditFragment(){
     lateinit var descriptionET: EditText
     lateinit var nameET: EditText
     //endregion
-    private lateinit var viewModel: RaceViewModel
 
     private var raceID:Long = Long.MIN_VALUE
 

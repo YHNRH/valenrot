@@ -18,17 +18,17 @@ import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.viewmodel.CampaignViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
-class CampaignFragment : AbstractEditFragment() {
+class CampaignFragment : AbstractEditFragment<Campaign>() {
 
     //region VIEWS
-    lateinit var saveBtn: Button
-    lateinit var descriptionET: EditText
-    lateinit var nameET: EditText
+    private lateinit var saveBtn: Button
+    private lateinit var descriptionET: EditText
+    private lateinit var nameET: EditText
     //endregion
-    private lateinit var viewModel: CampaignViewModel
 
-    private var campaignID:Long = -1
+    private var campaignID:Long = Long.MIN_VALUE
 
 
     override fun onCreateView(
@@ -57,8 +57,8 @@ class CampaignFragment : AbstractEditFragment() {
         saveBtn.setOnClickListener {
             val description = descriptionET.text.toString()
             val name = nameET.text.toString()
-            if (!campaignID.equals(-1)) {
-                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
+            if (campaignID != Long.MIN_VALUE) {
+                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm", Locale.US)
                     val currentDateAndTime: String = sdf.format(Date())
                     val updatedCampaign= Campaign(
                        // description,
@@ -66,18 +66,9 @@ class CampaignFragment : AbstractEditFragment() {
                         currentDateAndTime)
                     updatedCampaign.uid = campaignID
                     viewModel.update(updatedCampaign)
-                    Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
-            } else {
-                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-                    val currentDateAndTime: String = sdf.format(Date())
-                    val insertCampaign = Campaign(
-                       // description,
-                        name,
-                        currentDateAndTime)
-                    viewModel.update(insertCampaign)
-                    Toast.makeText(activity, "${insertCampaign.name} Added", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "${updatedCampaign.name} Updated..", Toast.LENGTH_LONG).show()
             }
-            //(activity as MainActivity).toCampaignListFragment()
+            (activity as MainActivity).toFragment(Consts.FragmentTags.CAMPAIGNLIST_FRAGMENT)
         }
         return fragment
     }
@@ -85,13 +76,8 @@ class CampaignFragment : AbstractEditFragment() {
         if (entity != null) {
             val campaign = entity as Campaign
             campaignID = campaign.uid
-            saveBtn.text = "Update Note"
             //descriptionET.setText(campaign.description)
             nameET.setText(campaign.name)
-        } else {
-            campaignID = -1
-            saveBtn.text = "Save Note"
         }
-
     }
 }

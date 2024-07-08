@@ -29,18 +29,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="2dp"
-            android:id="@+id/menu_races"
+            android:id="@+id/menu_campaigns"
             android:textAlignment="center"
             android:background="@color/teal_200"
-            android:text="Расы"/>
+            android:text="Кампании"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="2dp"
-            android:id="@+id/menu_campaigns"
+            android:id="@+id/menu_instruction"
             android:textAlignment="center"
             android:background="@color/teal_200"
-            android:text="Кампании"/>
+            android:text="Инструкция"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="2dp"
+            android:id="@+id/menu_lists"
+            android:textAlignment="center"
+            android:background="@color/teal_200"
+            android:text="Списки"/>
     </LinearLayout>
 </FrameLayout>
