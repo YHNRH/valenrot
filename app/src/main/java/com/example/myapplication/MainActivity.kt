@@ -9,6 +9,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.myapplication.core.common.Consts
+import com.example.myapplication.core.common.Consts.FragmentTags.CAMPAIGNEDIT_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.CAMPAIGNLIST_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.MAIN_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.RACEEDIT_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.RACELIST_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.SUBRACEEDIT_FRAGMENT
 import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Race
@@ -33,23 +40,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<TextView>(R.id.menu_roll).setOnClickListener{v -> toFragment(v)}
-        findViewById<TextView>(R.id.menu_races).setOnClickListener {v -> toFragment(v)}
-        findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {v -> toFragment(v)}
+        findViewById<TextView>(R.id.menu_roll).setOnClickListener{ toFragment(MAIN_FRAGMENT) }
+        findViewById<TextView>(R.id.menu_races).setOnClickListener {toFragment(RACELIST_FRAGMENT)}
+        findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {toFragment(CAMPAIGNLIST_FRAGMENT)}
 
         if (savedInstanceState == null) {
             val fragmentTransaction: FragmentTransaction = supportFragmentManager
                 .beginTransaction()
-            fragmentTransaction.add(R.id.container, rollFragment, MAIN_FRAGMENT)
+            fragmentTransaction.add(R.id.container, rollFragment, MAIN_FRAGMENT.toString())
             fragmentTransaction.commit()
         }
     }
 
-    private fun toFragment(v:View){
-        val tag = getSufficientFragmentTag(v as TextView)
-        val fr = getSufficientFragment(v)
+    fun toFragment(tag: Consts.FragmentTag){
+        val fr = getSufficientFragment(tag)
         val fragment = supportFragmentManager
-            .findFragmentByTag(tag)
+            .findFragmentByTag(tag.toString())
 
         if (fragment == null) {
             val fragmentTransaction: FragmentTransaction = supportFragmentManager
@@ -57,10 +63,10 @@ class MainActivity : AppCompatActivity() {
             fragmentTransaction.replace(
                 R.id.container,
                 fr,
-                tag
+                tag.toString()
             )
             fragmentTransaction.commit()
-            changeMenuButtonColor(v)
+            changeMenuButtonColor(getMenuButton(tag))
         }
     }
     private fun changeMenuButtonColor(v:View?){
@@ -92,46 +98,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSufficientFragmentTag(entity : BaseEntity): String {
         return when (entity){
-            is Subrace -> SUBRACEEDIT_FRAGMENT
-            is Race -> RACEEDIT_FRAGMENT
-            is Campaign -> CAMPAIGNEDIT_FRAGMENT
-            else -> ""
-        }
-    }
-
-    private fun getSufficientFragmentTag(view:TextView): String {
-        return when (view.text){
-            "Главная" -> MAIN_FRAGMENT
-            "Расы" -> RACELIST_FRAGMENT
-            "Кампании" -> CAMPAIGNLIST_FRAGMENT
+            is Subrace -> SUBRACEEDIT_FRAGMENT.toString()
+            is Race -> RACEEDIT_FRAGMENT.toString()
+            is Campaign -> CAMPAIGNEDIT_FRAGMENT.toString()
             else -> ""
         }
     }
 
     private fun getSufficientFragment(entity : BaseEntity): AbstractEditFragment {
         return when (entity){
-            is Subrace -> subraceFragment
+            is Subrace  -> subraceFragment
             is Campaign -> campaignFragment
             is Race -> raceFragment
             else -> raceFragment
         }
     }
 
-    private fun getSufficientFragment(view : TextView): Fragment {
-        return when (view.text){
-            "Главная" -> rollFragment
-            "Расы" -> raceListFragment
-            "Кампании" -> campaignListFragment
+    private fun getSufficientFragment(tag : Consts.FragmentTag): Fragment {
+        return when (tag){
+            MAIN_FRAGMENT -> rollFragment
+            RACELIST_FRAGMENT -> raceListFragment
+            CAMPAIGNLIST_FRAGMENT -> campaignListFragment
             else -> rollFragment
         }
     }
 
-    companion object {
-        const val MAIN_FRAGMENT: String = "MAIN_FRAGMENT"
-        const val RACELIST_FRAGMENT: String = "RACELIST_FRAGMENT"
-        const val RACEEDIT_FRAGMENT: String = "RACEEDIT_FRAGMENT"
-        const val SUBRACEEDIT_FRAGMENT: String = "SUBRACEEDIT_FRAGMENT"
-        const val CAMPAIGNLIST_FRAGMENT: String = "CAMPAIGNLIST_FRAGMENT"
-        const val CAMPAIGNEDIT_FRAGMENT: String = "CAMPAIGNEDIT_FRAGMENT"
+    private fun getMenuButton(tag : Consts.FragmentTag) : View {
+        return when (tag){
+            MAIN_FRAGMENT -> findViewById(R.id.menu_roll)
+            RACELIST_FRAGMENT -> findViewById(R.id.menu_races)
+            CAMPAIGNLIST_FRAGMENT -> findViewById(R.id.menu_campaigns)
+            else -> findViewById(R.id.menu_roll)
+        }
     }
 }

@@ -1,15 +1,17 @@
 package com.example.myapplication.ui.campaign
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
+import com.example.myapplication.core.common.Consts
 import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
@@ -33,6 +35,13 @@ class CampaignFragment : AbstractEditFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    (requireActivity() as MainActivity).toFragment(Consts.FragmentTags.CAMPAIGNLIST_FRAGMENT)
+                }
+            })
         val fragment = inflater.inflate(R.layout.fragment_campaignedit, container, false)
 
         viewModel = ViewModelProvider(

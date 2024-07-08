@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.MainActivity
 
 import com.example.myapplication.R
+import com.example.myapplication.core.common.Consts
 import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Subrace
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
@@ -34,6 +37,13 @@ class SubraceFragment : AbstractEditFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    (requireActivity() as MainActivity).toFragment(Consts.FragmentTags.RACELIST_FRAGMENT)
+                }
+            })
         val fragment = inflater.inflate(R.layout.fragment_subraceedit, container, false)
 
         viewModel = ViewModelProvider(

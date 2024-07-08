@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
+import com.example.myapplication.core.common.Consts.FragmentTags.RACELIST_FRAGMENT
 import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
@@ -36,12 +39,19 @@ class RaceFragment : AbstractEditFragment(){
     //endregion
     private lateinit var viewModel: RaceViewModel
 
-    private var raceID:Long = -1
+    private var raceID:Long = Long.MIN_VALUE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    (requireActivity() as MainActivity).toFragment(RACELIST_FRAGMENT)
+                }
+            })
         val fragment = inflater.inflate(R.layout.fragment_raceedit, container, false)
 
         viewModel = ViewModelProvider(
@@ -77,7 +87,7 @@ class RaceFragment : AbstractEditFragment(){
             val damage = damageET.text.toString()
             val description = descriptionET.text.toString()
             val name = nameET.text.toString()
-            if (!raceID.equals(-1)) {
+            if (raceID != Long.MIN_VALUE) {
                     val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
                     val updatedRace = Race(
                         strength,
