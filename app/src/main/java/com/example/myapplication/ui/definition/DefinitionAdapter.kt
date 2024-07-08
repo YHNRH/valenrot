@@ -1,26 +1,24 @@
-package com.example.myapplication.ui.racelist
+package com.example.myapplication.ui.definition
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.core.room.entity.Race
-import com.example.myapplication.viewmodel.SubraceViewModel
 import android.graphics.BitmapFactory
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.myapplication.MainActivity
 import com.example.myapplication.core.common.flip
 import com.example.myapplication.core.room.entity.Definition
 import com.example.myapplication.core.room.entity.Field
-import com.example.myapplication.core.room.entity.Subrace
 import com.example.myapplication.ui.interfaces.AbstractRVAdapter
 import com.example.myapplication.ui.interfaces.AbstractViewHolder
 import com.example.myapplication.ui.interfaces.OnClickEntityInterface
+import com.example.myapplication.ui.racelist.DefinitionListFragment
 import com.example.myapplication.viewmodel.FieldViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -35,7 +33,7 @@ class DefinitionAdapter(
         private lateinit var subraceRV: RecyclerView
 
         inner class ViewHolder(itemView: View) : AbstractViewHolder(itemView){
-            val nameTV: TextView  = itemView.findViewById(R.id.name)
+            val titleET: EditText  = itemView.findViewById(R.id.title)
             val deleteIV: ImageView  = itemView.findViewById(R.id.delete)
             val expandBtn: ImageView  = itemView.findViewById(R.id.expand)
             val addBtn: ImageView = itemView.findViewById(R.id.addBtn)
@@ -43,7 +41,7 @@ class DefinitionAdapter(
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val itemView = LayoutInflater.from(parent.context).inflate(
-                R.layout.list_item_race,
+                R.layout.list_item_definition,
                 parent, false
             )
             return ViewHolder(itemView)
@@ -82,7 +80,14 @@ class DefinitionAdapter(
                 notifyDataSetChanged()
             }
             
-            holder.nameTV.text = allEntities[position].title
+            holder.titleET.setText(allEntities[position].title)
+            holder.titleET.onFocusChangeListener = View.OnFocusChangeListener { v, b ->
+                if (!b){
+                    val updatedEntity = allEntities[position]
+                    updatedEntity.title = (v as EditText).text.toString()
+                    context.updateDefinition(updatedEntity)
+                }
+            }
             holder.deleteIV.setOnClickListener {
                 context.onDeleteClick(allEntities[position])
             }
@@ -94,15 +99,16 @@ class DefinitionAdapter(
                 fieldViewModel.add(
                     Field("name",
                         allEntities[position].uid,
+                        "string",
                         SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()))
                 )
                 Toast.makeText(context.requireContext(), "test Added", Toast.LENGTH_LONG).show()
             }
         }
 
-          fun updateList(newList: List<Definition>) {
+          override fun updateList(newList: List<Definition>) {
             allEntities.clear()
-              allEntities.addAll(newList)
+            allEntities.addAll(newList)
             notifyDataSetChanged()
         }
 

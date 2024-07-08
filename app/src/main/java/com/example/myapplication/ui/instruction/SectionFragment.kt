@@ -15,10 +15,8 @@ import com.example.myapplication.R
 import com.example.myapplication.core.common.Consts
 import com.example.myapplication.core.room.entity.BaseEntity
 import com.example.myapplication.core.room.entity.Section
-import com.example.myapplication.core.room.entity.Subrace
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.viewmodel.SectionViewModel
-import com.example.myapplication.viewmodel.SubraceViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 

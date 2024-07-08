@@ -28,19 +28,13 @@ import com.example.myapplication.ui.campaign.CampaignListFragment
 import com.example.myapplication.ui.instruction.SectionFragment
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.ui.roll.RollFragment
-import com.example.myapplication.ui.race.RaceFragment
 import com.example.myapplication.ui.instruction.InstructionFragment
 import com.example.myapplication.ui.racelist.DefinitionListFragment
-import com.example.myapplication.ui.subrace.SubraceFragment
-import com.example.myapplication.ui.racelist.RaceListFragment
 
 class MainActivity : AppCompatActivity() {
     private var rollFragment = RollFragment()
-    private var raceListFragment = RaceListFragment()
     private var campaignListFragment = CampaignListFragment()
     private var definitionListFragment = DefinitionListFragment()
-    private var raceFragment = RaceFragment()
-    private var subraceFragment = SubraceFragment()
     private var campaignFragment = CampaignFragment()
     private var instructionFragment = InstructionFragment()
     private var sectionFragment = SectionFragment()
@@ -117,18 +111,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun getSufficientFragment(entity : BaseEntity): AbstractEditFragment<*> {
         return when (entity){
-            is Subrace  -> subraceFragment
             is Campaign -> campaignFragment
-            is Race -> raceFragment
             is Section -> sectionFragment
-            else -> raceFragment
+            else -> campaignFragment
         }
     }
 
     private fun getSufficientFragment(tag : Consts.FragmentTag): Fragment {
         return when (tag){
             MAIN_FRAGMENT -> rollFragment
-            RACELIST_FRAGMENT -> raceListFragment
             INSTRUCTION_FRAGMENT -> instructionFragment
             CAMPAIGNLIST_FRAGMENT -> campaignListFragment
             DEFINITIONLIST_FRAGMENT -> definitionListFragment

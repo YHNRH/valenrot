@@ -11,19 +11,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.core.common.flip
 import com.example.myapplication.core.room.entity.Campaign
+import com.example.myapplication.ui.interfaces.AbstractRVAdapter
+import com.example.myapplication.ui.interfaces.AbstractViewHolder
 import com.example.myapplication.viewmodel.CharacterViewModel
 
 class CampaignRVAdapter(
     private val activity : CampaignListFragment,
     private val characterViewModel : CharacterViewModel,
     ) :
-        RecyclerView.Adapter<CampaignRVAdapter.ViewHolder>(){
+        AbstractRVAdapter<Campaign>(){
 
         private val allCampaigns = ArrayList<Campaign>()
         private lateinit var characterRV: RecyclerView
 
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View) : AbstractViewHolder(itemView) {
             val noteTV = itemView.findViewById<TextView>(R.id.name)
             val deleteIV = itemView.findViewById<ImageView>(R.id.delete)
             val expandBtn = itemView.findViewById<ImageView>(R.id.expand)
@@ -39,7 +41,8 @@ class CampaignRVAdapter(
             return ViewHolder(itemView)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
+        holder as ViewHolder
             characterRV = holder.itemView.findViewById(R.id.list)
             characterRV.layoutManager = LinearLayoutManager(activity.requireContext())
             val characterRVAdapter = CharacterRVAdapter(activity.requireContext())
@@ -80,12 +83,7 @@ class CampaignRVAdapter(
             }
 
         }
-
-        override fun getItemCount(): Int {
-            return allCampaigns.size
-        }
-
-        fun updateList(newList: List<Campaign>) {
+        override fun updateList(newList: List<Campaign>) {
             allCampaigns.clear()
             allCampaigns.addAll(newList)
             notifyDataSetChanged()

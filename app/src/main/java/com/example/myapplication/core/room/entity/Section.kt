@@ -14,7 +14,8 @@ data class Section(
     override val title: String?,
     val text: String?,
     val parentId: Long?,
-    override val lastChangeDate: String?
+    override val lastChangeDate: String?,
+    val type: Long = -1
 ): BaseEntity() {
     @Ignore
     var isExpanded = false

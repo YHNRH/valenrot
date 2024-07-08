@@ -32,7 +32,6 @@ import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.example.myapplication.viewmodel.RaceViewModel
 import com.example.myapplication.viewmodel.SectionViewModel
-import com.example.myapplication.viewmodel.SubraceViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +43,6 @@ import kotlin.random.Random
 class RollFragment : Fragment() {
 
     private lateinit var raceViewModel: RaceViewModel
-    private lateinit var subraceViewModel: SubraceViewModel
     private lateinit var campaignViewModel: CampaignViewModel
     private lateinit var characterViewModel: CharacterViewModel
     private lateinit var sectionViewModel: SectionViewModel
@@ -88,11 +86,6 @@ class RollFragment : Fragment() {
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[RaceViewModel::class.java]
 
-        subraceViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[SubraceViewModel::class.java]
-
         sectionViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
@@ -100,7 +93,7 @@ class RollFragment : Fragment() {
 
         spinner = fragment.findViewById(R.id.spinner)
 
-        val adapter = CampaignSpinnerAdapter(requireContext())
+        val adapter = CampaignSpinnerAdapter<Campaign>(requireContext())
         spinner.adapter = adapter
         campaignViewModel.allEntities.observe(this.requireActivity()) { list ->
             list?.let {
@@ -286,7 +279,7 @@ class RollFragment : Fragment() {
                 response: Response<List<RaceWithSubraces>>
             ) {
                 if (response.body() != null){
-                    raceViewModel.addAll(response.body()!!, subraceViewModel)
+                   // raceViewModel.addAll(response.body()!!, subraceViewModel)
                 }
             Toast.makeText(requireContext(),
                 "Инструкция успешно скачана",

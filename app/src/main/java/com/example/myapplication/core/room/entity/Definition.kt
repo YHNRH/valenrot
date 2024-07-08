@@ -10,7 +10,7 @@ import java.util.Date
 
 @Entity
 data class Definition(
-    override val title: String?,
+    override var title: String?,
     override val lastChangeDate: String?
 ): BaseEntity() {
     @Ignore

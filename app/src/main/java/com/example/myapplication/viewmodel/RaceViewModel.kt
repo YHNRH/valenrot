@@ -18,14 +18,14 @@ class RaceViewModel(application: Application) : BaseViewModel<Race>(application)
     override var allEntities = (repository as RaceRepository).allRaces
     var allRacesWithSubraces = (repository as RaceRepository).allRacesWithSubraces
 
-    fun addAll(entities: List<RaceWithSubraces>, subraceViewModel:SubraceViewModel) = viewModelScope.launch(Dispatchers.IO) {
-        (repository as RaceRepository).deleteAll()
-        entities.forEach {
-                val insertedId = repository.insert(it.race)
-                it.subraces.forEach {
-                    it.raceId = insertedId
-                    subraceViewModel.add(it)
-                }
-            }
-    }
+//    fun addAll(entities: List<RaceWithSubraces>, subraceViewModel:SubraceViewModel) = viewModelScope.launch(Dispatchers.IO) {
+//        (repository as RaceRepository).deleteAll()
+//        entities.forEach {
+//                val insertedId = repository.insert(it.race)
+//                it.subraces.forEach {
+//                    it.raceId = insertedId
+//                    subraceViewModel.add(it)
+//                }
+//            }
+//    }
 }

@@ -10,6 +10,6 @@ import androidx.room.PrimaryKey
 data class Field(
     override var title: String?,
     val parentId : Long?,
-    val value: String?,
+    var type: String?,
     override val lastChangeDate: String?
 ): BaseEntity()

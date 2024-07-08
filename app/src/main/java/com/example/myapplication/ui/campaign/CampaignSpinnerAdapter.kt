@@ -10,13 +10,13 @@ import androidx.annotation.LayoutRes
 import com.example.myapplication.R
 import com.example.myapplication.core.room.entity.Campaign
 
-class CampaignSpinnerAdapter(
+class CampaignSpinnerAdapter<T>(
     context: Context
-    ) : ArrayAdapter<Campaign>(
+    ) : ArrayAdapter<T>(
         context,
     ViewHolder.LAYOUT
 ) {
-        private val allCampaigns = ArrayList<Campaign>()
+        private val allEntities = ArrayList<T>()
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             return onBindView(parent, position)
         }
@@ -31,16 +31,16 @@ class CampaignSpinnerAdapter(
                 R.layout.spinner_item,
                 parent, false
             )
-            itemView.findViewById<TextView>(R.id.name).text = model.title
+            itemView.findViewById<TextView>(R.id.name).text = model.toString()
             return itemView
         }
 
     override fun getCount(): Int {
-        return allCampaigns.size
+        return allEntities.size
     }
 
-    override fun getItem(position: Int): Campaign {
-        return allCampaigns[position]
+    override fun getItem(position: Int): T {
+        return allEntities[position]
     }
 
         private class ViewHolder {
@@ -50,9 +50,9 @@ class CampaignSpinnerAdapter(
             }
         }
 
-    fun updateList(newList: List<Campaign>) {
-        allCampaigns.clear()
-        allCampaigns.addAll(newList)
+    fun updateList(newList: List<T>) {
+        allEntities.clear()
+        allEntities.addAll(newList)
         notifyDataSetChanged()
     }
 }

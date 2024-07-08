@@ -19,38 +19,27 @@ import java.util.Date
 
 class CampaignListFragment : AbstractListFragment<Campaign>(){
 
-    private lateinit var campaignsRV: RecyclerView
-    lateinit var addBtn: ImageView
+    override val layout = R.layout.fragment_campaignlist
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val fragment = inflater.inflate(R.layout.fragment_campaignlist, container, false)
-        campaignsRV = fragment.findViewById(R.id.list)
-        addBtn = fragment.findViewById(R.id.addBtn)
-
+    override fun init() {
         viewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[CampaignViewModel::class.java]
-
-        campaignsRV.layoutManager = LinearLayoutManager(requireActivity())
-
         val characterViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[CharacterViewModel::class.java]
 
-        val campaignRVAdapter = CampaignRVAdapter(
+        adapter = CampaignRVAdapter(
             this,
             characterViewModel)
 
-        campaignsRV.adapter = campaignRVAdapter
+        recyclerView.adapter = adapter
 
         viewModel.allEntities.observe(this.requireActivity()) { list ->
             list?.let {
-                campaignRVAdapter.updateList(it)
+                adapter.updateList(it)
             }
         }
 
@@ -60,7 +49,6 @@ class CampaignListFragment : AbstractListFragment<Campaign>(){
                 SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
             ))
         }
-        return fragment
     }
 
     override fun onClick(entity: Campaign) {

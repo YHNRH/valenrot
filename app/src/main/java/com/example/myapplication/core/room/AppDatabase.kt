@@ -26,7 +26,7 @@ import com.example.myapplication.core.room.entity.Subrace
     Subrace::class,
     Section::class,
     Definition::class,
-    Field::class], version = 15)
+    Field::class], version = 18)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRaceDao(): RaceDao
     abstract fun getSubraceDao(): SubraceDao
