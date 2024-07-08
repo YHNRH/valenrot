@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.campaignlist
+package com.example.myapplication.ui.campaign
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,7 +14,8 @@ class CampaignSpinnerAdapter(
     context: Context
     ) : ArrayAdapter<Campaign>(
         context,
-        ViewHolder.LAYOUT) {
+    ViewHolder.LAYOUT
+) {
         private val allCampaigns = ArrayList<Campaign>()
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             return onBindView(parent, position)
@@ -30,7 +31,7 @@ class CampaignSpinnerAdapter(
                 R.layout.spinner_item,
                 parent, false
             )
-            itemView.findViewById<TextView>(R.id.name).text = model.name
+            itemView.findViewById<TextView>(R.id.name).text = model.title
             return itemView
         }
 

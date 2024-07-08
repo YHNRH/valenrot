@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.campaignlist
+package com.example.myapplication.ui.campaign
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -31,7 +31,7 @@ class CharacterRVAdapter(
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.infoTV.setText(allCharacter[position].character.name + ", " + allCharacter[position].race.name + ", " + allCharacter[position].character.temper)
+            holder.infoTV.setText(allCharacter[position].character.title + ", " + allCharacter[position].race.title + ", " + allCharacter[position].character.temper)
             holder.deleteBtn.setOnClickListener {
                 //characterClickDeleteInterface.onDeleteClick(allCharacter[position].character)
             }

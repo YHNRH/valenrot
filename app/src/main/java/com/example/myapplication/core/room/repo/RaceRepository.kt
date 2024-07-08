@@ -13,4 +13,7 @@ class RaceRepository(dao: RaceDao) : BaseRepository<Race>(dao)  {
     suspend fun deleteAll(){
         (dao as RaceDao).deleteAll()
     }
+
+    override val allEntities: LiveData<List<Race>>
+        get() = TODO("Not yet implemented")
 }

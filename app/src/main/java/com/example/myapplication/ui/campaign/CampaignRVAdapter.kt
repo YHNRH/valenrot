@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.campaignlist
+package com.example.myapplication.ui.campaign
 
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -51,7 +51,7 @@ class CampaignRVAdapter(
                 }
             }
 
-            holder.noteTV.text = allCampaigns[position].name
+            holder.noteTV.text = allCampaigns[position].title
             holder.deleteIV.setOnClickListener {
                 activity.onDeleteClick(allCampaigns[position])
             }

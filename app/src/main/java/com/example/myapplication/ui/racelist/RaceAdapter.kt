@@ -17,6 +17,8 @@ import android.widget.Toast
 import com.example.myapplication.MainActivity
 import com.example.myapplication.core.common.flip
 import com.example.myapplication.core.room.entity.Subrace
+import com.example.myapplication.ui.interfaces.AbstractRVAdapter
+import com.example.myapplication.ui.interfaces.AbstractViewHolder
 import com.example.myapplication.ui.interfaces.OnClickEntityInterface
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -25,13 +27,12 @@ class RaceAdapter(
     val context: RaceListFragment,
     private val subraceViewModel : SubraceViewModel
     ) :
-        RecyclerView.Adapter<RaceAdapter.ViewHolder>(),
+        AbstractRVAdapter<Race>(),
         OnClickEntityInterface<Subrace>{
 
-        private val allRaces = ArrayList<Race>()
         private lateinit var subraceRV: RecyclerView
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View) : AbstractViewHolder(itemView) {
             val nameTV: TextView  = itemView.findViewById(R.id.name)
             val deleteIV: ImageView  = itemView.findViewById(R.id.delete)
             val expandBtn: ImageView  = itemView.findViewById(R.id.expand)
@@ -46,7 +47,8 @@ class RaceAdapter(
             return ViewHolder(itemView)
         }
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AbstractViewHolder , position: Int) {
+            holder as ViewHolder
             subraceRV = holder.itemView.findViewById(R.id.list)
             subraceRV.layoutManager = LinearLayoutManager(context.requireContext())
             val subraceRVAdapter = SubraceRVAdapter(this)
@@ -54,14 +56,14 @@ class RaceAdapter(
             subraceRV.adapter = subraceRVAdapter
             subraceViewModel.allEntities.observe(context) { list ->
                 list?.let {
-                    subraceRVAdapter.updateList(it, allRaces[position])
+                    subraceRVAdapter.updateList(it, allEntities[position])
                 }
             }
 
-            subraceRV.visibility =  if (allRaces[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
-            holder.addBtn.visibility = if (allRaces[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
+            subraceRV.visibility =  if (allEntities[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
+            holder.addBtn.visibility = if (allEntities[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
 
-            if (allRaces[position].isExpanded){
+            if (allEntities[position].isExpanded){
                 val bitmap = BitmapFactory.decodeResource(
                     context.resources,
                     R.drawable.expand_icon
@@ -74,21 +76,21 @@ class RaceAdapter(
                 holder.expandBtn.setImageResource(R.drawable.expand_icon)
             }
             holder.expandBtn.setOnClickListener {
-                allRaces[position].isExpanded = !allRaces[position].isExpanded
+                allEntities[position].isExpanded = !allEntities[position].isExpanded
                 notifyDataSetChanged()
             }
             
-            holder.nameTV.text = allRaces[position].name
+            holder.nameTV.text = allEntities[position].title
             holder.deleteIV.setOnClickListener {
-                context.onDeleteClick(allRaces[position])
+                context.onDeleteClick(allEntities[position])
             }
             holder.itemView.findViewById<LinearLayout>(R.id.holder).setOnClickListener {
-                context.onClick(allRaces[position])
+                context.onClick(allEntities[position])
             }
 
             holder.addBtn.setOnClickListener {
                 subraceViewModel.add(
-                    Subrace("name", "desc", "asd", "asd",allRaces[position].uid, SimpleDateFormat("dd MMM, yyyy - HH:mm").format(
+                    Subrace("name", "desc", "asd", "asd",allEntities[position].uid, SimpleDateFormat("dd MMM, yyyy - HH:mm").format(
                         Date()
                     ))
                 )
@@ -96,13 +98,9 @@ class RaceAdapter(
             }
         }
 
-        override fun getItemCount(): Int {
-            return allRaces.size
-        }
-
         fun updateList(newList: List<Race>) {
-            allRaces.clear()
-            allRaces.addAll(newList)
+            allEntities.clear()
+            allEntities.addAll(newList)
             notifyDataSetChanged()
         }
 

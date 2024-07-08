@@ -89,7 +89,7 @@ class SubraceFragment : AbstractEditFragment<Subrace>() {
             passiveAbilityET.setText(subrace.passiveAbility)
             activeAbilityET.setText(subrace.activeAbility)
             descriptionET.setText(subrace.description)
-            nameET.setText(subrace.name)
+            nameET.setText(subrace.title)
         }
     }
 }

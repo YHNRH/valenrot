@@ -70,7 +70,7 @@ class SectionFragment : AbstractEditFragment<Section>() {
                     viewModel.update(updatedRace)
                     Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
             }
-            //(activity as MainActivity).toRaceListFragment()
+            (activity as MainActivity).toFragment(Consts.FragmentTags.INSTRUCTION_FRAGMENT)
         }
         return fragment
     }
@@ -81,7 +81,7 @@ class SectionFragment : AbstractEditFragment<Section>() {
             sectionId = section.uid
             parentId = section.parentId
             saveBtn.text = "Update Note"
-            nameET.setText(section.name)
+            nameET.setText(section.title)
             textET.setText(section.text)
         }
     }

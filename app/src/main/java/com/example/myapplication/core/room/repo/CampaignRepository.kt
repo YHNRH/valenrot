@@ -6,5 +6,5 @@ import com.example.myapplication.core.room.entity.Campaign
 
 class CampaignRepository(dao: CampaignDao) : BaseRepository<Campaign>(dao) {
 
-    val allCampaigns: LiveData<List<Campaign>> = dao.getAllCampaigns()
+    override val allEntities: LiveData<List<Campaign>> = dao.getAllCampaigns()
 }

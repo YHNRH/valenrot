@@ -10,7 +10,7 @@ import androidx.room.ForeignKey
         childColumns = ["raceId"],
         onDelete = ForeignKey.CASCADE
     )])
-data class Subrace(override var name: String?,
+data class Subrace(override var title: String?,
                    val description: String?,
                    val activeAbility: String?,
                    val passiveAbility: String?,

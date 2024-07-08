@@ -8,5 +8,7 @@ import com.example.myapplication.core.room.entity.CharacterAndRace
 class CharacterRepository(dao: CharacterDao)  : BaseRepository<Character>(dao) {
 
     val allCharacters: LiveData<List<CharacterAndRace>> = dao.getCharactersAndRace()
+    override val allEntities: LiveData<List<Character>>
+        get() = TODO("Not yet implemented")
 
 }

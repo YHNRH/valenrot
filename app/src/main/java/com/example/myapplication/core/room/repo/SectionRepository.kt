@@ -10,5 +10,7 @@ import com.example.myapplication.core.room.entity.Section
 class SectionRepository(dao: SectionDao)  : BaseRepository<Section>(dao) {
 
     val allSections: LiveData<List<Section>> = dao.getAllSections()
+    override val allEntities: LiveData<List<Section>>
+        get() = TODO("Not yet implemented")
 
 }

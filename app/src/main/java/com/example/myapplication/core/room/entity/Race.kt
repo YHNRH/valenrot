@@ -18,7 +18,7 @@ data class Race(
     val accuracy: Int?,
     val damage: String?,
     val description: String?,
-    override var name: String?,
+    override var title: String?,
     override var lastChangeDate: String?
 ):BaseEntity(){
     @Ignore

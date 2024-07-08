@@ -8,29 +8,33 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.core.room.entity.Race
+import com.example.myapplication.viewmodel.SubraceViewModel
 import android.graphics.BitmapFactory
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.myapplication.MainActivity
 import com.example.myapplication.core.common.flip
-import com.example.myapplication.core.room.entity.Section
-import com.example.myapplication.ui.instruction.InstructionFragment
+import com.example.myapplication.core.room.entity.Definition
+import com.example.myapplication.core.room.entity.Field
+import com.example.myapplication.core.room.entity.Subrace
+import com.example.myapplication.ui.interfaces.AbstractRVAdapter
+import com.example.myapplication.ui.interfaces.AbstractViewHolder
 import com.example.myapplication.ui.interfaces.OnClickEntityInterface
-import com.example.myapplication.viewmodel.SectionViewModel
+import com.example.myapplication.viewmodel.FieldViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class SectionAdapter(
-    val context: InstructionFragment,
-    val sectionViewModel: SectionViewModel
+class DefinitionAdapter(
+    val context: DefinitionListFragment,
+    private val fieldViewModel : FieldViewModel
     ) :
-        RecyclerView.Adapter<SectionAdapter.ViewHolder>(),
-        OnClickEntityInterface<Section>{
+        AbstractRVAdapter<Definition>(),
+        OnClickEntityInterface<Definition>{
 
-        private val allSections = ArrayList<Section>()
         private lateinit var subraceRV: RecyclerView
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View) : AbstractViewHolder(itemView){
             val nameTV: TextView  = itemView.findViewById(R.id.name)
             val deleteIV: ImageView  = itemView.findViewById(R.id.delete)
             val expandBtn: ImageView  = itemView.findViewById(R.id.expand)
@@ -45,23 +49,23 @@ class SectionAdapter(
             return ViewHolder(itemView)
         }
 
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
+            holder as ViewHolder
             subraceRV = holder.itemView.findViewById(R.id.list)
             subraceRV.layoutManager = LinearLayoutManager(context.requireContext())
-            val childAdapter = SectionAdapter(context, sectionViewModel)
+            val subraceRVAdapter = FieldAdapter(this)
 
-            subraceRV.adapter = childAdapter
-            sectionViewModel.allEntities.observe(context) { list ->
+            subraceRV.adapter = subraceRVAdapter
+            fieldViewModel.allEntities.observe(context) { list ->
                 list?.let {
-                    childAdapter.updateList(it, allSections[position])
+                    subraceRVAdapter.updateList(it, allEntities[position])
                 }
             }
 
-            subraceRV.visibility =  if (allSections[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
-            holder.addBtn.visibility = if (allSections[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
+            subraceRV.visibility =  if (allEntities[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
+            holder.addBtn.visibility = if (allEntities[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
 
-            if (allSections[position].isExpanded){
+            if (allEntities[position].isExpanded){
                 val bitmap = BitmapFactory.decodeResource(
                     context.resources,
                     R.drawable.expand_icon
@@ -74,48 +78,39 @@ class SectionAdapter(
                 holder.expandBtn.setImageResource(R.drawable.expand_icon)
             }
             holder.expandBtn.setOnClickListener {
-                allSections[position].isExpanded = !allSections[position].isExpanded
+                allEntities[position].isExpanded = !allEntities[position].isExpanded
                 notifyDataSetChanged()
             }
             
-            holder.nameTV.text = allSections[position].title
+            holder.nameTV.text = allEntities[position].title
             holder.deleteIV.setOnClickListener {
-                context.onDeleteClick(allSections[position])
+                context.onDeleteClick(allEntities[position])
             }
             holder.itemView.findViewById<LinearLayout>(R.id.holder).setOnClickListener {
-                context.onClick(allSections[position])
+                context.onClick(allEntities[position])
             }
 
             holder.addBtn.setOnClickListener {
-                sectionViewModel.add(
-                    Section("name",
-                        "desc",
-                        allSections[position].uid,
-                        SimpleDateFormat("dd MMM, yyyy - HH:mm").format(
-                        Date()
-                    ))
+                fieldViewModel.add(
+                    Field("name",
+                        allEntities[position].uid,
+                        SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()))
                 )
                 Toast.makeText(context.requireContext(), "test Added", Toast.LENGTH_LONG).show()
             }
         }
 
-        override fun getItemCount(): Int {
-            return allSections.size
-        }
-
-        fun updateList(newList: List<Section>) {
-            allSections.clear()
-            allSections.addAll(newList.filter { it.parentId == null})
+          fun updateList(newList: List<Definition>) {
+            allEntities.clear()
+              allEntities.addAll(newList)
             notifyDataSetChanged()
         }
 
-        fun updateList(newList: List<Section>, race: Section) {
-            allSections.clear()
-            allSections.addAll(newList.filter { it.parentId == race.uid})
-            notifyDataSetChanged()
-        }
-
-    override fun onClick(entity: Section) {
+    override fun onClick(entity: Definition) {
         (context.requireActivity() as MainActivity).toEditFragment(entity)
+    }
+
+    fun updateField(entity: Field) {
+        fieldViewModel.update(entity)
     }
 }

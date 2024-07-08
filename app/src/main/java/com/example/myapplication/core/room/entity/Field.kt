@@ -7,10 +7,9 @@ import androidx.room.PrimaryKey
 
 
 @Entity
-data class Campaign(
-    override val title: String?,
+data class Field(
+    override var title: String?,
+    val parentId : Long?,
+    val value: String?,
     override val lastChangeDate: String?
-): BaseEntity() {
-    @Ignore
-    var isExpanded = false
-}
+): BaseEntity()

@@ -66,7 +66,7 @@ class CampaignFragment : AbstractEditFragment<Campaign>() {
                         currentDateAndTime)
                     updatedCampaign.uid = campaignID
                     viewModel.update(updatedCampaign)
-                    Toast.makeText(activity, "${updatedCampaign.name} Updated..", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "${updatedCampaign.title} Updated..", Toast.LENGTH_LONG).show()
             }
             (activity as MainActivity).toFragment(Consts.FragmentTags.CAMPAIGNLIST_FRAGMENT)
         }
@@ -77,7 +77,7 @@ class CampaignFragment : AbstractEditFragment<Campaign>() {
             val campaign = entity as Campaign
             campaignID = campaign.uid
             //descriptionET.setText(campaign.description)
-            nameET.setText(campaign.name)
+            nameET.setText(campaign.title)
         }
     }
 }

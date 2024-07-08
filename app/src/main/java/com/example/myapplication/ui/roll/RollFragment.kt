@@ -27,7 +27,7 @@ import com.example.myapplication.core.room.entity.Campaign
 import com.example.myapplication.core.room.entity.Character
 import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.core.room.entity.RaceWithSubraces
-import com.example.myapplication.ui.campaignlist.CampaignSpinnerAdapter
+import com.example.myapplication.ui.campaign.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.example.myapplication.viewmodel.RaceViewModel
@@ -197,7 +197,7 @@ class RollFragment : Fragment() {
                         val rnd = Random.nextInt(1, list.size + 1)
                         val value = list[rnd - 1]
                         rollRaceNumberTV.text = rnd.toString()
-                        rollRaceTV.text = value.name
+                        rollRaceTV.text = value.title
                         rolledRace = value
                     } else {
                         context?.let {
@@ -249,7 +249,7 @@ class RollFragment : Fragment() {
                 currentDateAndTime
             ))
             Toast.makeText(requireContext(),
-                campaign.name + "\n" +
+                campaign.title + "\n" +
                         campaign.uid + "\n" +
                         name + "\n",
                 Toast.LENGTH_SHORT).show()

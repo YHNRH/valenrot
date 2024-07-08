@@ -18,6 +18,6 @@ data class Character(
     val raceId: Long?,
     val campaignId: Long?,
     val temper: Int?,
-    override val name: String?,
+    override val title: String?,
     override val lastChangeDate: String?
 ) : BaseEntity()

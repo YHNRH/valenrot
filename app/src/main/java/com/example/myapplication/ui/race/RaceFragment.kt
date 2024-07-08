@@ -121,7 +121,7 @@ class RaceFragment : AbstractEditFragment<Race>(){
                         name,
                         SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()))
                     viewModel.add(insertRace)
-                    Toast.makeText(activity, "${insertRace.name} Added", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "${insertRace.title} Added", Toast.LENGTH_LONG).show()
             }
             //(activity as MainActivity).toRaceListFragment()
         }
@@ -143,7 +143,7 @@ class RaceFragment : AbstractEditFragment<Race>(){
             accuracyET.setText(race.accuracy.toString())
             damageET.setText(race.damage.toString())
             descriptionET.setText(race.description)
-            nameET.setText(race.name)
+            nameET.setText(race.title)
         } else {
             raceID = -1
             saveBtn.text = "Save Note"

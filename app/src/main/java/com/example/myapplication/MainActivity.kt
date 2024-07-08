@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.myapplication.core.common.Consts
 import com.example.myapplication.core.common.Consts.FragmentTags.CAMPAIGNEDIT_FRAGMENT
 import com.example.myapplication.core.common.Consts.FragmentTags.CAMPAIGNLIST_FRAGMENT
+import com.example.myapplication.core.common.Consts.FragmentTags.DEFINITIONLIST_FRAGMENT
 import com.example.myapplication.core.common.Consts.FragmentTags.INSTRUCTION_FRAGMENT
 import com.example.myapplication.core.common.Consts.FragmentTags.MAIN_FRAGMENT
 import com.example.myapplication.core.common.Consts.FragmentTags.RACEEDIT_FRAGMENT
@@ -23,12 +24,13 @@ import com.example.myapplication.core.room.entity.Race
 import com.example.myapplication.core.room.entity.Section
 import com.example.myapplication.core.room.entity.Subrace
 import com.example.myapplication.ui.campaign.CampaignFragment
-import com.example.myapplication.ui.campaignlist.CampaignListFragment
+import com.example.myapplication.ui.campaign.CampaignListFragment
 import com.example.myapplication.ui.instruction.SectionFragment
 import com.example.myapplication.ui.interfaces.AbstractEditFragment
 import com.example.myapplication.ui.roll.RollFragment
 import com.example.myapplication.ui.race.RaceFragment
 import com.example.myapplication.ui.instruction.InstructionFragment
+import com.example.myapplication.ui.racelist.DefinitionListFragment
 import com.example.myapplication.ui.subrace.SubraceFragment
 import com.example.myapplication.ui.racelist.RaceListFragment
 
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private var rollFragment = RollFragment()
     private var raceListFragment = RaceListFragment()
     private var campaignListFragment = CampaignListFragment()
+    private var definitionListFragment = DefinitionListFragment()
     private var raceFragment = RaceFragment()
     private var subraceFragment = SubraceFragment()
     private var campaignFragment = CampaignFragment()
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.menu_roll).setOnClickListener{ toFragment(MAIN_FRAGMENT) }
         findViewById<TextView>(R.id.menu_instruction).setOnClickListener {toFragment(INSTRUCTION_FRAGMENT)}
         findViewById<TextView>(R.id.menu_campaigns).setOnClickListener {toFragment(CAMPAIGNLIST_FRAGMENT)}
+        findViewById<TextView>(R.id.menu_definitions).setOnClickListener {toFragment(DEFINITIONLIST_FRAGMENT)}
 
         if (savedInstanceState == null) {
             val fragmentTransaction: FragmentTransaction = supportFragmentManager
@@ -127,6 +131,7 @@ class MainActivity : AppCompatActivity() {
             RACELIST_FRAGMENT -> raceListFragment
             INSTRUCTION_FRAGMENT -> instructionFragment
             CAMPAIGNLIST_FRAGMENT -> campaignListFragment
+            DEFINITIONLIST_FRAGMENT -> definitionListFragment
             else -> rollFragment
         }
     }
@@ -136,6 +141,7 @@ class MainActivity : AppCompatActivity() {
             MAIN_FRAGMENT -> findViewById(R.id.menu_roll)
             INSTRUCTION_FRAGMENT -> findViewById(R.id.menu_instruction)
             CAMPAIGNLIST_FRAGMENT -> findViewById(R.id.menu_campaigns)
+            DEFINITIONLIST_FRAGMENT -> findViewById(R.id.menu_definitions)
             else -> findViewById(R.id.menu_roll)
         }
     }

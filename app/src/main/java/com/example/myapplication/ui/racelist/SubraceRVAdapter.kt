@@ -32,7 +32,7 @@ class SubraceRVAdapter(
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.infoTV.setText(allSubrace[position].name + ", " )
+            holder.infoTV.setText(allSubrace[position].title + ", " )
             holder.deleteBtn.setOnClickListener {
                 //characterClickDeleteInterface.onDeleteClick(allCharacter[position].character)
             }

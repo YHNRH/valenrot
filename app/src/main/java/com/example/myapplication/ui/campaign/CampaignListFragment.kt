@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.campaignlist
+package com.example.myapplication.ui.campaign
 
 import android.os.Bundle
 import android.view.LayoutInflater
