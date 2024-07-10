@@ -14,11 +14,12 @@ data class Section(
     override val title: String?,
     val text: String?,
     val parentId: Long?,
-    override val lastChangeDate: String?,
-    val type: Long = -1
+    override val lastChangeDate: String?
 ): BaseEntity() {
     @Ignore
     var isExpanded = false
+
+    var isList = false
 
     companion object{
         fun default(): Section {

@@ -31,7 +31,7 @@ class CharacterRVAdapter(
         }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.infoTV.setText(allCharacter[position].character.title + ", " + allCharacter[position].race.title + ", " + allCharacter[position].character.temper)
+       //     holder.infoTV.setText(allCharacter[position].character.title + ", " + allCharacter[position].race.title + ", " + allCharacter[position].character.temper)
             holder.deleteBtn.setOnClickListener {
                 //characterClickDeleteInterface.onDeleteClick(allCharacter[position].character)
             }

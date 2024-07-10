@@ -42,14 +42,5 @@
             android:textAlignment="center"
             android:background="@color/teal_200"
             android:text="Инструкция"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="2dp"
-            android:id="@+id/menu_definitions"
-            android:textAlignment="center"
-            android:background="@color/teal_200"
-            android:text="Списки"/>
     </LinearLayout>
 </FrameLayout>

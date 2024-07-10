@@ -19,7 +19,7 @@ import java.util.Date
 
 class CampaignListFragment : AbstractListFragment<Campaign>(){
 
-    override val layout = R.layout.fragment_campaignlist
+    override val layout = R.layout.fragment_list
 
     override fun init() {
         viewModel = ViewModelProvider(

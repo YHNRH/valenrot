@@ -19,15 +19,11 @@ import com.example.myapplication.ui.interfaces.AbstractListFragment
 import com.example.myapplication.ui.interfaces.AbstractRVAdapter
 import com.example.myapplication.ui.interfaces.AbstractViewHolder
 import com.example.myapplication.ui.interfaces.OnClickEntityInterface
-import com.example.myapplication.viewmodel.DefinitionViewModel
 import com.example.myapplication.viewmodel.SectionViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class SectionAdapter(
     val context: AbstractListFragment<Section>,
-    private val sectionViewModel: SectionViewModel,
-    private val definitionViewModel: DefinitionViewModel
+    private val sectionViewModel: SectionViewModel
     ) :
         AbstractRVAdapter<Section>(),
         OnClickEntityInterface<Section>{
@@ -53,7 +49,7 @@ class SectionAdapter(
             holder as ViewHolder
             subraceRV = holder.itemView.findViewById(R.id.list)
             subraceRV.layoutManager = LinearLayoutManager(context.requireContext())
-            val childAdapter = SectionAdapter(context, sectionViewModel, definitionViewModel)
+            val childAdapter = SectionAdapter(context, sectionViewModel)
 
             subraceRV.adapter = childAdapter
             sectionViewModel.allEntities.observe(context) { list ->
@@ -91,31 +87,31 @@ class SectionAdapter(
             }
 
             holder.addBtn.setOnClickListener {
-                definitionViewModel.allEntities.observeOnce(context) {
-                    val checkedItem = intArrayOf(-1)
-                    val alertDialog = AlertDialog.Builder(context.requireContext())
-                    alertDialog.setTitle("Choose an Item")
+//                definitionViewModel.allEntities.observeOnce(context) {
+//                    val checkedItem = intArrayOf(-1)
+//                    val alertDialog = AlertDialog.Builder(context.requireContext())
+//                    alertDialog.setTitle("Choose an Item")
+//
 
+//                    alertDialog.setSingleChoiceItems((it.map { it.title }).toTypedArray(), checkedItem[0]) { dialog, which ->
+//                        checkedItem[0] = which
+//                        //tvSelectedItemPreview.setText("Selected Item is : " + listItems[which])
+//                        sectionViewModel.add(
+//                            Section(
+//                                "name",
+//                                "desc",
+//                                allEntities[position].uid,
+//                                SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()),
+//                                it[which].uid
+//                            )
+//                        )
+//                        dialog.dismiss()
+//                    }
+//                    alertDialog.setNegativeButton("Cancel") { dialog, which -> }
+//                    val customAlertDialog = alertDialog.create()
+//                    customAlertDialog.show()
 
-                    alertDialog.setSingleChoiceItems((it.map { it.title }).toTypedArray(), checkedItem[0]) { dialog, which ->
-                        checkedItem[0] = which
-                        //tvSelectedItemPreview.setText("Selected Item is : " + listItems[which])
-                        sectionViewModel.add(
-                            Section(
-                                "name",
-                                "desc",
-                                allEntities[position].uid,
-                                SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date()),
-                                it[which].uid
-                            )
-                        )
-                        dialog.dismiss()
-                    }
-                    alertDialog.setNegativeButton("Cancel") { dialog, which -> }
-                    val customAlertDialog = alertDialog.create()
-                    customAlertDialog.show()
-
-                }
+                //}
             }
         }
 

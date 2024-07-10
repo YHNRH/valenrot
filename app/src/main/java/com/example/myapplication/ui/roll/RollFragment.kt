@@ -24,25 +24,17 @@ import com.example.myapplication.R
 import com.example.myapplication.core.api.Common
 import com.example.myapplication.core.common.observeOnce
 import com.example.myapplication.core.room.entity.Campaign
-import com.example.myapplication.core.room.entity.Character
-import com.example.myapplication.core.room.entity.Race
-import com.example.myapplication.core.room.entity.RaceWithSubraces
 import com.example.myapplication.ui.campaign.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
-import com.example.myapplication.viewmodel.RaceViewModel
 import com.example.myapplication.viewmodel.SectionViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
 import kotlin.random.Random
 
 
 class RollFragment : Fragment() {
-
-    private lateinit var raceViewModel: RaceViewModel
     private lateinit var campaignViewModel: CampaignViewModel
     private lateinit var characterViewModel: CharacterViewModel
     private lateinit var sectionViewModel: SectionViewModel
@@ -52,7 +44,6 @@ class RollFragment : Fragment() {
     private lateinit var rollTemperNumberTV : TextView
     private lateinit var rollRaceTV : TextView
     private lateinit var rollTemperTV : TextView
-    private lateinit var rolledRace : Race
     private var rolledTemper = 0
     private var apiService = Common.apiService
 
@@ -80,11 +71,6 @@ class RollFragment : Fragment() {
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[CharacterViewModel::class.java]
-
-        raceViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[RaceViewModel::class.java]
 
         sectionViewModel = ViewModelProvider(
             this,
@@ -145,7 +131,7 @@ class RollFragment : Fragment() {
                     TODO("Not yet implemented")
                 }
             })
-            .into(imageView);
+            .into(imageView)
 
         Glide.with(this)
             .load(R.drawable.roll_red)
@@ -179,29 +165,29 @@ class RollFragment : Fragment() {
                     TODO("Not yet implemented")
                 }
             })
-            .into(imageView1);
+            .into(imageView1)
 
     }
 
     private fun rollRace(){
-            raceViewModel.allEntities.observe(this.requireActivity()) { list ->
-                list?.let {
-                    if (list.isNotEmpty()) {
-                        val rnd = Random.nextInt(1, list.size + 1)
-                        val value = list[rnd - 1]
-                        rollRaceNumberTV.text = rnd.toString()
-                        rollRaceTV.text = value.title
-                        rolledRace = value
-                    } else {
-                        context?.let {
-                            Toast.makeText(context,
-                                "Отсутствуют расы",
-                                Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-
-            }
+//            raceViewModel.allEntities.observe(this.requireActivity()) { list ->
+//                list?.let {
+//                    if (list.isNotEmpty()) {
+//                        val rnd = Random.nextInt(1, list.size + 1)
+//                        val value = list[rnd - 1]
+//                        rollRaceNumberTV.text = rnd.toString()
+//                        rollRaceTV.text = value.title
+//                        rolledRace = value
+//                    } else {
+//                        context?.let {
+//                            Toast.makeText(context,
+//                                "Отсутствуют расы",
+//                                Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                }
+//
+//            }
     }
 
     private fun rollTemper(){
@@ -230,27 +216,27 @@ class RollFragment : Fragment() {
     }
 
     private fun save() {
-        if (this::rolledRace.isInitialized && rolledTemper != 0 && spinner.selectedItem !== null){
-            val campaign =  spinner.selectedItem as Campaign
-            val name     =  nameET.text.toString()
-            val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
-            characterViewModel.addCharacter(Character(
-                rolledRace.uid,
-                campaign.uid,
-                rolledTemper,
-                name,
-                currentDateAndTime
-            ))
-            Toast.makeText(requireContext(),
-                campaign.title + "\n" +
-                        campaign.uid + "\n" +
-                        name + "\n",
-                Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(requireContext(),
-                "Ошибка сохранения персонажа",
-                Toast.LENGTH_SHORT).show()
-        }
+//        if (this::rolledRace.isInitialized && rolledTemper != 0 && spinner.selectedItem !== null){
+//            val campaign =  spinner.selectedItem as Campaign
+//            val name     =  nameET.text.toString()
+//            val currentDateAndTime: String = SimpleDateFormat("dd MMM, yyyy - HH:mm").format(Date())
+//            characterViewModel.addCharacter(Character(
+//                rolledRace.uid,
+//                campaign.uid,
+//                rolledTemper,
+//                name,
+//                currentDateAndTime
+//            ))
+//            Toast.makeText(requireContext(),
+//                campaign.title + "\n" +
+//                        campaign.uid + "\n" +
+//                        name + "\n",
+//                Toast.LENGTH_SHORT).show()
+//        } else {
+//            Toast.makeText(requireContext(),
+//                "Ошибка сохранения персонажа",
+//                Toast.LENGTH_SHORT).show()
+//        }
 
     }
 
@@ -273,26 +259,26 @@ class RollFragment : Fragment() {
         }
     }
     private fun downloadInstruction(){
-        apiService.downloadInstruction().enqueue(object : Callback<List<RaceWithSubraces>> {
-            override fun onResponse(
-                p0: Call<List<RaceWithSubraces>>,
-                response: Response<List<RaceWithSubraces>>
-            ) {
-                if (response.body() != null){
-                   // raceViewModel.addAll(response.body()!!, subraceViewModel)
-                }
-            Toast.makeText(requireContext(),
-                "Инструкция успешно скачана",
-                Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onFailure(p0: Call<List<RaceWithSubraces>>, p1: Throwable) {
-                Toast.makeText(requireContext(),
-                    "Ошибка скачивания инструкции!",
-                    Toast.LENGTH_SHORT).show()
-            }
-
-        })
+//        apiService.downloadInstruction().enqueue(object : Callback<List<RaceWithSubraces>> {
+//            override fun onResponse(
+//                p0: Call<List<RaceWithSubraces>>,
+//                response: Response<List<RaceWithSubraces>>
+//            ) {
+//                if (response.body() != null){
+//                   // raceViewModel.addAll(response.body()!!, subraceViewModel)
+//                }
+//            Toast.makeText(requireContext(),
+//                "Инструкция успешно скачана",
+//                Toast.LENGTH_SHORT).show()
+//            }
+//
+//            override fun onFailure(p0: Call<List<RaceWithSubraces>>, p1: Throwable) {
+//                Toast.makeText(requireContext(),
+//                    "Ошибка скачивания инструкции!",
+//                    Toast.LENGTH_SHORT).show()
+//            }
+//
+//        })
     }
 
 }
