@@ -3,12 +3,10 @@ package com.example.myapplication.core.room.repo
 import androidx.lifecycle.LiveData
 import com.example.myapplication.core.room.dao.CharacterDao
 import com.example.myapplication.core.room.entity.Character
-import com.example.myapplication.core.room.entity.CharacterAndRace
 
 class CharacterRepository(dao: CharacterDao)  : BaseRepository<Character>(dao) {
 
-    val allCharacters: LiveData<List<CharacterAndRace>> = dao.getCharactersAndRace()
-    override val allEntities: LiveData<List<Character>>
-        get() = TODO("Not yet implemented")
+    override val allEntities: LiveData<List<Character>> = dao.getCharacters()
+
 
 }

@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.roll
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,9 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.myapplication.R
 import com.example.myapplication.core.api.Common
 import com.example.myapplication.core.common.observeOnce
@@ -28,6 +21,7 @@ import com.example.myapplication.ui.campaign.CampaignSpinnerAdapter
 import com.example.myapplication.viewmodel.CampaignViewModel
 import com.example.myapplication.viewmodel.CharacterViewModel
 import com.example.myapplication.viewmodel.SectionViewModel
+import com.google.android.flexbox.FlexboxLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,11 +34,6 @@ class RollFragment : Fragment() {
     private lateinit var sectionViewModel: SectionViewModel
     private lateinit var spinner:Spinner
     private lateinit var nameET:EditText
-    private lateinit var rollRaceNumberTV : TextView
-    private lateinit var rollTemperNumberTV : TextView
-    private lateinit var rollRaceTV : TextView
-    private lateinit var rollTemperTV : TextView
-    private var rolledTemper = 0
     private var apiService = Common.apiService
 
     override fun onCreateView(
@@ -57,10 +46,10 @@ class RollFragment : Fragment() {
         fragment.findViewById<TextView>(R.id.uploadBtn).setOnClickListener { uploadInstruction()}
         fragment.findViewById<TextView>(R.id.downloadBtn).setOnClickListener { downloadInstruction()}
         nameET = fragment.findViewById(R.id.name)
-        rollRaceNumberTV = fragment.findViewById(R.id.roll_tw)
-        rollTemperNumberTV = fragment.findViewById(R.id.roll_tw1)
-        rollRaceTV = fragment.findViewById(R.id.race)
-        rollTemperTV = fragment.findViewById(R.id.temper)
+     //   rollRaceNumberTV = fragment.findViewById(R.id.roll_tw)
+        //rollTemperNumberTV = fragment.findViewById(R.id.roll_tw1)
+        //rollRaceTV = fragment.findViewById(R.id.race)
+        //rollTemperTV = fragment.findViewById(R.id.temper)
 
         campaignViewModel = ViewModelProvider(
             this,
@@ -86,116 +75,22 @@ class RollFragment : Fragment() {
                 adapter.updateList(it)
             }
         }
+
+        fragment.findViewById<ImageView>(R.id.addRoller).setOnClickListener {
+            fragment.findViewById<FlexboxLayout>(R.id.roller_view).addView(RollerView(requireContext(), this, sectionViewModel), 0)
+        }
         return fragment
     }
 
     private fun roll(view: View) {
-
+        rollName()
         val root = view.rootView
-
-        rollRaceNumberTV.text = ""
-        rollTemperNumberTV.text = ""
-        val imageView = root.findViewById<ImageView>(R.id.myImageView)
-        val imageView1 = root.findViewById<ImageView>(R.id.myImageView1)
-
-        Glide.with(this)
-            .load(R.drawable.roll_green)
-            .listener(object : RequestListener<Drawable> {
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    val res = resource as GifDrawable
-                    res.setLoopCount(1)
-                    res.registerAnimationCallback(object :
-                        Animatable2Compat.AnimationCallback() {
-                        override fun onAnimationEnd(drawable: Drawable) {
-                            rollTemper()
-                            rollName()
-                        }
-                    })
-
-                    return false
-                }
-
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    TODO("Not yet implemented")
-                }
-            })
-            .into(imageView)
-
-        Glide.with(this)
-            .load(R.drawable.roll_red)
-            .listener(object : RequestListener<Drawable> {
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    val res = resource as GifDrawable
-                    res.setLoopCount(1)
-                    res.registerAnimationCallback(object :
-                        Animatable2Compat.AnimationCallback() {
-                        override fun onAnimationEnd(drawable: Drawable) {
-                            rollRace()
-                        }
-                    })
-
-                    return false
-                }
-
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    TODO("Not yet implemented")
-                }
-            })
-            .into(imageView1)
-
+        root.findViewById<FlexboxLayout>(R.id.roller_view).children.forEach {
+            if (it is RollerView)
+                it.roll()
+        }
     }
 
-    private fun rollRace(){
-//            raceViewModel.allEntities.observe(this.requireActivity()) { list ->
-//                list?.let {
-//                    if (list.isNotEmpty()) {
-//                        val rnd = Random.nextInt(1, list.size + 1)
-//                        val value = list[rnd - 1]
-//                        rollRaceNumberTV.text = rnd.toString()
-//                        rollRaceTV.text = value.title
-//                        rolledRace = value
-//                    } else {
-//                        context?.let {
-//                            Toast.makeText(context,
-//                                "Отсутствуют расы",
-//                                Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//                }
-//
-//            }
-    }
-
-    private fun rollTemper(){
-        val rnd = Random.nextInt(1, 21)
-        rollTemperNumberTV.text = rnd.toString()
-        rollTemperTV.text = rnd.toString()
-        rolledTemper = rnd
-    }
 
     private fun rollName(){
         apiService.getRandomNames().enqueue(object : Callback<Array<String>> {

@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/race_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.race.RaceFragment">
-    <EditText
-        android:hint="@string/title"
+    android:orientation="vertical">
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/name"
         android:layout_height="wrap_content"
-        />
+        android:orientation="horizontal">
+        <EditText
+            android:autofillHints=""
+            android:hint="@string/title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/name"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+        <CheckBox
+            android:id="@+id/isList"
+            android:text="Список?"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <EditText
         android:layout_width="match_parent"
-        android:hint="Текст"
+        android:autofillHints=""
+        android:hint="@string/text"
         android:id="@+id/text"
         android:layout_height="0dp"
         android:gravity="start"
         android:layout_weight="1"
-        />
+        android:inputType="textMultiLine" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

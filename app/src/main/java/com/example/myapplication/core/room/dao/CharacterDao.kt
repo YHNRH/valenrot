@@ -12,4 +12,6 @@ interface CharacterDao : BaseDao<Character>  {
     @Transaction
     @Query("SELECT * FROM character order by uid ASC")
     fun getCharactersAndRace(): LiveData<List<CharacterAndRace>>
+    @Query("SELECT * FROM character order by uid ASC")
+    fun getCharacters(): LiveData<List<Character>>
 }

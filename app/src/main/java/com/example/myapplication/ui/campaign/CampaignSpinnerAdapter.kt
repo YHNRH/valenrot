@@ -8,9 +8,9 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.example.myapplication.R
-import com.example.myapplication.core.room.entity.Campaign
+import com.example.myapplication.core.room.entity.BaseEntity
 
-class CampaignSpinnerAdapter<T>(
+class CampaignSpinnerAdapter<T : BaseEntity>(
     context: Context
     ) : ArrayAdapter<T>(
         context,
@@ -31,7 +31,7 @@ class CampaignSpinnerAdapter<T>(
                 R.layout.spinner_item,
                 parent, false
             )
-            itemView.findViewById<TextView>(R.id.name).text = model.toString()
+            itemView.findViewById<TextView>(R.id.name).text = model.title
             return itemView
         }
 
@@ -46,7 +46,7 @@ class CampaignSpinnerAdapter<T>(
         private class ViewHolder {
             companion object {
                 @LayoutRes
-                val LAYOUT = R.layout.list_item_race
+                val LAYOUT = R.layout.list_item
             }
         }
 

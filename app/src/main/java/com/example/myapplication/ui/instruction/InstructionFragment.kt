@@ -20,15 +20,6 @@ class InstructionFragment : AbstractListFragment<Section>(){
             ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
         )[SectionViewModel::class.java]
         adapter = SectionAdapter(this, viewModel as SectionViewModel)
-        recyclerView.adapter = adapter
-
-
-
-        viewModel.allEntities.observe(this.requireActivity()) { list ->
-            list?.let {
-                (adapter as SectionAdapter).updateList(it)
-            }
-        }
         addBtn.setOnClickListener {
             viewModel.add(Section.default())
             Toast.makeText(this.requireContext(), "Раса добавлена", Toast.LENGTH_LONG).show()

@@ -11,15 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.core.room.entity.BaseEntity
+import com.example.myapplication.core.room.entity.Section
 import com.example.myapplication.ui.dialog.DeleteDialogFragment
 import com.example.myapplication.viewmodel.BaseViewModel
 
-abstract class AbstractListFragment<T>:
+abstract class AbstractListFragment<T : BaseEntity>:
     Fragment(),
     OnDeleteEntityInterface<T>,
     OnClickEntityInterface<T>,
     DialogListener {
-    var entityToDelete: T? = null
+    private var entityToDelete: T? = null
     lateinit var viewModel: BaseViewModel<T>
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: AbstractRVAdapter<T>
@@ -40,6 +42,17 @@ abstract class AbstractListFragment<T>:
         addBtn = fragment.findViewById(R.id.addBtn)
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         init()
+        viewModel.allEntities.observe(this.requireActivity()) { list ->
+            list?.let {
+                adapter.updateList(it.filter {
+                    if (it is Section)
+                        it.parentId == null
+                    else
+                        true
+                })
+            }
+        }
+        recyclerView.adapter = adapter
         return fragment
     }
 

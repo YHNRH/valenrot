@@ -87,4 +87,5 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.rxandroid)
     implementation(libs.rxjava)
+    implementation(libs.flexbox)
 }

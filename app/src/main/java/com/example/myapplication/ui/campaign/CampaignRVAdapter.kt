@@ -1,91 +1,36 @@
 package com.example.myapplication.ui.campaign
 
-import android.graphics.BitmapFactory
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.R
-import com.example.myapplication.core.common.flip
 import com.example.myapplication.core.room.entity.Campaign
+import com.example.myapplication.ui.interfaces.AbstractListFragment
 import com.example.myapplication.ui.interfaces.AbstractRVAdapter
 import com.example.myapplication.ui.interfaces.AbstractViewHolder
-import com.example.myapplication.viewmodel.CharacterViewModel
+import com.example.myapplication.viewmodel.BaseViewModel
+import com.example.myapplication.viewmodel.CampaignViewModel
 
 class CampaignRVAdapter(
-    private val activity : CampaignListFragment,
-    private val characterViewModel : CharacterViewModel,
+    activity : AbstractListFragment<Campaign>,
+    characterViewModel : CampaignViewModel
     ) :
-        AbstractRVAdapter<Campaign>(){
-
-        private val allCampaigns = ArrayList<Campaign>()
-        private lateinit var characterRV: RecyclerView
-
-
-        inner class ViewHolder(itemView: View) : AbstractViewHolder(itemView) {
-            val noteTV = itemView.findViewById<TextView>(R.id.name)
-            val deleteIV = itemView.findViewById<ImageView>(R.id.delete)
-            val expandBtn = itemView.findViewById<ImageView>(R.id.expand)
-
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val itemView = LayoutInflater.from(parent.context).inflate(
-                R.layout.list_item_campaign,
-                parent, false
-            )
-
-            return ViewHolder(itemView)
-        }
-
-    override fun onBindViewHolder(holder: AbstractViewHolder, position: Int) {
-        holder as ViewHolder
-            characterRV = holder.itemView.findViewById(R.id.list)
-            characterRV.layoutManager = LinearLayoutManager(activity.requireContext())
-            val characterRVAdapter = CharacterRVAdapter(activity.requireContext())
-
-            characterRV.adapter = characterRVAdapter
-            characterViewModel.allCharacters.observe(activity) { list ->
-                list?.let {
-                    characterRVAdapter.updateList(it, allCampaigns[position])
-                }
-            }
-
-            holder.noteTV.text = allCampaigns[position].title
-            holder.deleteIV.setOnClickListener {
-                activity.onDeleteClick(allCampaigns[position])
-            }
-            holder.itemView.setOnClickListener {
-                activity.onClick(allCampaigns[position])
-            }
-
-
-            characterRV.visibility = if (allCampaigns[position].isExpanded)  RecyclerView.VISIBLE else RecyclerView.GONE
-
-            if (allCampaigns[position].isExpanded){
-                val bitmap = BitmapFactory.decodeResource(
-                    activity.resources,
-                    R.drawable.expand_icon
-                )
-                val cx = bitmap.width / 2f
-                val cy = bitmap.height / 2f
-                val flippedBitmap = bitmap.flip(1f, -1f, cx, cy)
-                holder.expandBtn.setImageBitmap(flippedBitmap)
-            } else {
-                holder.expandBtn.setImageResource(R.drawable.expand_icon)
-            }
-            holder.expandBtn.setOnClickListener {
-                allCampaigns[position].isExpanded = !allCampaigns[position].isExpanded
-                notifyDataSetChanged()
-            }
-
-        }
+        AbstractRVAdapter<Campaign>(activity, characterViewModel){
         override fun updateList(newList: List<Campaign>) {
-            allCampaigns.clear()
-            allCampaigns.addAll(newList)
+            allEntities.clear()
+            allEntities.addAll(newList)
             notifyDataSetChanged()
         }
+
+    override fun invoke(
+        context: AbstractListFragment<Campaign>,
+        viewModel: BaseViewModel<*>,
+        parentEntity: Campaign?
+    ): AbstractRVAdapter<Campaign> {
+        return CampaignRVAdapter(context, viewModel as CampaignViewModel)
+    }
+
+    override fun onBindViewHolderExtension(holder: AbstractViewHolder, entity: Campaign) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addChildItem(parentId: Long?): Campaign {
+        TODO("Not yet implemented")
+    }
 }
